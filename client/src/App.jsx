@@ -3,14 +3,14 @@ import Signup from './components/Auth/Signup';
 import Login from './components/Auth/Login';
 import UserProfile from './components/Auth/UserProfile';
 import { AuthProvider } from './context/AuthContext';
-import AuthPage from './AuthPage';
+import AuthPage from './pages/AuthPage/AuthPage';
 import Layout from './Layout';
-import SellerDashboard from './components/Dashboards/SellerDashboard';
-import LandingPage from './LandingPage';
-import ProductDetails from './ProductDetails';
+import SellerDashboard from './pages/SellerDashboard/SellerDashboard';
+import LandingPage from './pages/LandingPage/LandingPage';
+import ProductDetails from './pages/ProductDetails/ProductDetails';
 import { ThemeContextProvider } from './context/themeContext';
 import { ShoppingCartProvider } from './context/ShoppingCartContext';
-import ShoppingCartPage from './ShoppingCartPage';
+import ShoppingCartPage from './pages/Cart/ShoppingCartPage';
 
 function App() {
   return (

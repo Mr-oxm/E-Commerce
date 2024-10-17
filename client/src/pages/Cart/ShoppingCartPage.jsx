@@ -1,5 +1,5 @@
 import React from 'react';
-import { useShoppingCart } from './context/ShoppingCartContext';
+import { useShoppingCart } from '../../context/ShoppingCartContext';
 import { FaTrash, FaShoppingCart, FaCreditCard } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 

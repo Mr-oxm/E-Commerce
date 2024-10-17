@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import CategoryProductsSlider from './components/Shared/CategoryProductsSlider';
-import routes from './constants/routes';
-import { categories } from './constants/categories';
+import CategoryProductsSlider from '../../components/Shared/CategoryProductsSlider';
+import routes from '../../constants/routes';
+import { categories } from '../../constants/categories';
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);

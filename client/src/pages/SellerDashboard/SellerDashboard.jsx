@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Route, Routes, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaBox, FaPlus, FaShoppingCart, FaChartBar, FaBars } from 'react-icons/fa';
-import ProductList from './ProductList';
-import AddEditProduct from './AddEditProduct';
-import OrderList from './OrderList';
-import SalesSummary from './SalesSummary';
+import ProductList from '../../components/SellerDashboard/ProductList';
+import AddEditProduct from '../../components/SellerDashboard/AddEditProduct';
+import OrderList from '../../components/SellerDashboard/OrderList';
+import SalesSummary from '../../components/SellerDashboard/SalesSummary';
 import routes from '../../constants/routes';
-import Drawer from '../Shared/Drawer';
+import Drawer from '../../components/Shared/Drawer';
 
 const SellerDashboard = () => {
   const [products, setProducts] = useState([]);

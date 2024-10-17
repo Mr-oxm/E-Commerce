@@ -1,4 +1,4 @@
-import { useThemeContext } from "./context/themeContext"
+import { useThemeContext } from "../../context/themeContext"
 
 const AuthPage = ({children}) => {
 

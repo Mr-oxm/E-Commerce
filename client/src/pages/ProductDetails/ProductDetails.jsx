@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { FaStar, FaShoppingCart, FaCheck } from 'react-icons/fa';
-import routes from './constants/routes';
-import { useShoppingCart } from './context/ShoppingCartContext';
+import routes from '../../constants/routes';
+import { useShoppingCart } from '../../context/ShoppingCartContext';
 
 const ProductDetails = () => {
   const [product, setProduct] = useState(null);
