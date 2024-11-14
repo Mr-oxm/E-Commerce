@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const ProductList = ({ products, onProductUpdate }) => {
     const handleRemoveProduct = async (productId) => {
       try {
-        await axios.delete(routes.seller.removeProduct(productId));
+        await axios.delete(routes.product.remove(productId));
         onProductUpdate();
       } catch (error) {
         console.error('Error removing product:', error);

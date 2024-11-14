@@ -6,7 +6,7 @@ import { themes } from '../../constants/themes';
 import Modal from './Model';
 import { useShoppingCart } from '../../context/ShoppingCartContext';
 // Import icons
-import { FaShoppingCart, FaUser, FaSignInAlt, FaCog, FaPalette, FaSignOutAlt } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaSignInAlt, FaCog, FaPalette, FaSignOutAlt, FaChartBar } from 'react-icons/fa';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
@@ -85,22 +85,27 @@ const UserIcon = ({user, logout}) => {
         return (
             <div className='max-h-56 overflow-y-scroll'>
                 {themes.map((theme, index) => (
-                <button onClick={()=>{themeContext.setTheme(theme)}} key={index} className={`${themeContext.theme == theme ? "bg-base-200" : ""} flex flex-row items-center justify-between py-2 px-4 cursor-pointer w-full hover:bg-base-200 rounded-lg`}>
-                    <span className='capitalize text-base-content font-normal text-sm '>
-                        {theme}
-                    </span>
-                    <div className=' bg-none w-2/5 flex flex-row justify-between '>
-                        <button data-theme={theme} className="p-2 rounded-xl bg-base-100"></button>
-                        <button data-theme={theme} className="p-2 rounded-xl bg-base-content"></button>
-                        <button data-theme={theme} className="p-2 rounded-xl bg-primary"></button>
-                        <button data-theme={theme} className="p-2 rounded-xl bg-secondary"></button>
-                        <button data-theme={theme} className="p-2 rounded-xl bg-accent"></button>
+                    <div 
+                        onClick={()=>{themeContext.setTheme(theme)}} 
+                        key={index} 
+                        className={`${themeContext.theme == theme ? "bg-base-200" : ""} flex flex-row items-center justify-between py-2 px-4 cursor-pointer w-full hover:bg-base-200 rounded-lg`}
+                    >
+                        <span className='capitalize text-base-content font-normal text-sm'>
+                            {theme}
+                        </span>
+                        <div className='bg-none w-2/5 flex flex-row justify-between'>
+                            <div data-theme={theme} className="p-2 rounded-xl bg-base-100"></div>
+                            <div data-theme={theme} className="p-2 rounded-xl bg-base-content"></div>
+                            <div data-theme={theme} className="p-2 rounded-xl bg-primary"></div>
+                            <div data-theme={theme} className="p-2 rounded-xl bg-secondary"></div>
+                            <div data-theme={theme} className="p-2 rounded-xl bg-accent"></div>
+                        </div>
                     </div>
-                </button>
                 ))}
             </div>
         );
     };
+
     return(
         <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
@@ -115,10 +120,19 @@ const UserIcon = ({user, logout}) => {
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow z-50">
                 <li className='font-bold text-lg p-2'>{user.profile.fullName}</li>
                 <div className='divider !p-0 !m-0'></div>
-                <li><a className="flex items-center"><FaUser className="mr-2" /> Profile</a></li>
-                <li><a className="flex items-center"><FaCog className="mr-2" /> Settings</a></li>
                 <li>
-                    <button className="flex items-center">
+                    <a className="flex items-center"><FaUser className="mr-2" /> Profile</a>
+                </li>
+                <li>
+                    <Link to="/dashboard" className="flex items-center">
+                        <FaChartBar className="mr-2" /> Dashboard
+                    </Link>
+                </li>
+                <li>
+                    <a className="flex items-center"><FaCog className="mr-2" /> Settings</a>
+                </li>
+                <li>
+                    <div className="flex items-center">
                         <FaPalette className="mr-2" />
                         <Modal 
                             title="Themes" 
@@ -127,7 +141,7 @@ const UserIcon = ({user, logout}) => {
                         >
                             <FaPalette className="mr-2" /> Themes
                         </Modal>
-                    </button>
+                    </div>
                 </li>
                 <li><button onClick={logout} className="flex items-center"><FaSignOutAlt className="mr-2" /> Logout</button></li>
             </ul>

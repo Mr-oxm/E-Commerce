@@ -75,9 +75,9 @@ const AddEditProduct = ({ onProductSaved }) => {
     try {
       let response;
       if (id) {
-        response = await axios.put(routes.seller.editProductDetails(id), productData);
+        response = await axios.put(routes.product.edit(id), productData);
       } else {
-        response = await axios.post(routes.seller.listNewProduct, productData);
+        response = await axios.post(routes.product.create, productData);
       }
       onProductSaved(response.data.data);
       if (!id) {

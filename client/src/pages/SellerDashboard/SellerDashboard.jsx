@@ -21,7 +21,7 @@ const SellerDashboard = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(routes.seller.getproducts);
+      const response = await axios.get(routes.product.sellerProducts);
       setProducts(response.data.data);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -30,7 +30,7 @@ const SellerDashboard = () => {
 
   const fetchOrders = async () => {
     // try {
-    //   const response = await axios.get(routes.seller.viewSales);
+    //   const response = await axios.get(routes.order.viewSales);
     //   setOrders(response.data.data);
     // } catch (error) {
     //   console.error('Error fetching orders:', error);
@@ -39,7 +39,7 @@ const SellerDashboard = () => {
 
   const handleProductSaved = () => {
     fetchProducts();
-    navigate('/seller');
+    navigate('/dashboard');
   };
 
 
@@ -77,16 +77,16 @@ const SellerNav = () => {
   return (
     <>
       <li>
-        <Link to="/seller"><FaBox className="mr-2" /> Products</Link>
+        <Link to="/dashboard"><FaBox className="mr-2" /> Products</Link>
       </li>
       <li>
-        <Link to="/seller/add-product"><FaPlus className="mr-2" /> Add Product</Link>
+        <Link to="/dashboard/add-product"><FaPlus className="mr-2" /> Add Product</Link>
       </li>
       <li>
-        <Link to="/seller/orders"><FaShoppingCart className="mr-2" /> Orders</Link>
+        <Link to="/dashboard/orders"><FaShoppingCart className="mr-2" /> Orders</Link>
       </li>
       <li>
-        <Link to="/seller/sales"><FaChartBar className="mr-2" /> Sales</Link>
+        <Link to="/dashboard/sales"><FaChartBar className="mr-2" /> Sales</Link>
       </li>
     </>
   );

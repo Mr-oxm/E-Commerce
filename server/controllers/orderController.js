@@ -134,3 +134,134 @@ exports.updateOrderStatus = async (req, res) => {
       res.status(500).json({ success: false, error: error.message });
     }
   };
+
+
+
+  exports.viewSales = async (req, res) => {
+    try {
+      const orders = await Order.find({ 'products.product': { $in: await Product.find({ seller: req.user.id }).select('_id') } })
+        .populate('products.product');
+      res.status(200).json({ success: true, data: orders });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  };
+  
+  exports.viewOrdersForProduct = async (req, res) => {
+    try {
+      const product = await Product.findById(req.params.productId);
+      if (!product || product.seller.toString() !== req.user.id) {
+        return res.status(404).json({ success: false, error: 'Product not found' });
+      }
+      const orders = await Order.find({ 'products.product': req.params.productId }).populate('buyer', 'username email');
+      res.status(200).json({ success: true, data: orders });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  };
+  
+  exports.shipOrder = async (req, res) => {
+    try {
+      const order = await Order.findById(req.params.orderId);
+      if (!order) {
+        return res.status(404).json({ success: false, error: 'Order not found' });
+      }
+      // Check if the seller owns at least one product in the order
+      const hasProduct = order.products.some(async (item) => {
+        const product = await Product.findById(item.product);
+        return product && product.seller.toString() === req.user.id;
+      });
+      if (!hasProduct) {
+        return res.status(403).json({ success: false, error: 'Not authorized to ship this order' });
+      }
+      order.status = 'shipped';
+      await order.save();
+      res.status(200).json({ success: true, message: 'Order shipped successfully' });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  };
+  
+  
+
+
+  exports.checkout = async (req, res) => {
+    try {
+      const { products, shippingAddress } = req.body;
+      let totalAmount = 0;
+      const orderProducts = [];
+  
+      for (let item of products) {
+        const product = await Product.findById(item.productId);
+        if (!product || product.stock < item.quantity) {
+          return res.status(400).json({ success: false, error: 'Product not available' });
+        }
+        totalAmount += product.price * item.quantity;
+        orderProducts.push({
+          product: product._id,
+          quantity: item.quantity,
+          price: product.price,
+        });
+        product.stock -= item.quantity;
+        await product.save();
+      }
+  
+      const order = await Order.create({
+        buyer: req.user.id,
+        products: orderProducts,
+        totalAmount,
+        shippingAddress,
+      });
+  
+      res.status(201).json({ success: true, data: order });
+    } catch (error) {
+      res.status(500).json({ success: false, error: error.message });
+    }
+  };
+  
+  exports.viewOrder = async (req, res) => {
+      try {
+        const order = await Order.findById(req.params.id).populate('products.product');
+        if (!order || order.buyer.toString() !== req.user.id) {
+          return res.status(404).json({ success: false, error: 'Order not found' });
+        }
+        res.status(200).json({ success: true, data: order });
+      } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+      }
+    };
+    
+
+    exports.viewOrderHistory = async (req, res) => {
+      try {
+        const orders = await Order.find({ buyer: req.user.id }).populate('products.product');
+        res.status(200).json({ success: true, data: orders });
+      } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+      }
+    };
+    
+    exports.cancelOrder = async (req, res) => {
+      try {
+        const order = await Order.findById(req.params.id);
+        if (!order || order.buyer.toString() !== req.user.id) {
+          return res.status(404).json({ success: false, error: 'Order not found' });
+        }
+        if (order.status !== 'pending') {
+          return res.status(400).json({ success: false, error: 'Order cannot be cancelled' });
+        }
+        order.status = 'cancelled';
+        await order.save();
+        
+        // Restore product stock
+        for (let item of order.products) {
+          const product = await Product.findById(item.product);
+          product.stock += item.quantity;
+          await product.save();
+        }
+        
+        res.status(200).json({ success: true, message: 'Order cancelled successfully' });
+      } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+      }
+    };

@@ -25,7 +25,7 @@ function App() {
               <Route path="/" element={<Layout children={<LandingPage/>}/>} />
               <Route path="/product/:id" element={<Layout children={<ProductDetails/>}/>} />
               <Route
-                path="/seller/*"
+                path="/dashboard/*"
                 element={
                   <Layout children={<SellerDashboard/>}/>
                 }

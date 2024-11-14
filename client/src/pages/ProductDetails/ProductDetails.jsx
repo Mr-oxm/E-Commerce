@@ -74,7 +74,9 @@ const ProductDetails = () => {
               ))}
             </div>
           </div>
-          <p className="mb-4">In Stock: {product.countInStock}</p>
+          <p className="mb-4">In Stock: 
+            <span className='font-bold  mx-2'>{product.stock}</span>
+          </p>
           <button 
             className={`btn ${isInCart ? 'btn-accent' : 'btn-primary'}`}
             onClick={() => addToCart(product)}

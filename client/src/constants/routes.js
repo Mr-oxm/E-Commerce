@@ -13,45 +13,33 @@ const routes = {
     getUserData: `${API_BASE_URL}/auth/user`,
     updateUserData: `${API_BASE_URL}/auth/updateuser`
   },
-  buyer: {
-    browseProducts: `${API_BASE_URL}/buyer/products`,
-    viewProductDetails: (productId) => `${API_BASE_URL}/buyer/products/${productId}`,
-    addToCart: `${API_BASE_URL}/buyer/cart/add`,
-    removeFromCart: `${API_BASE_URL}/buyer/cart/remove`,
-    checkout: `${API_BASE_URL}/buyer/checkout`,
-    viewOrder: (orderId) => `${API_BASE_URL}/buyer/orders/${orderId}`,
-    rateProduct: `${API_BASE_URL}/buyer/rate`,
-    viewOrderHistory: `${API_BASE_URL}/buyer/orders`,
-    cancelOrder: (orderId) => `${API_BASE_URL}/buyer/orders/${orderId}/cancel`
-  },
   order: {
     createOrder: `${API_BASE_URL}/order`,
     getOrderById: (orderId) => `${API_BASE_URL}/order/${orderId}`,
     cancelOrder: (orderId) => `${API_BASE_URL}/order/${orderId}/cancel`,
-    getOrderHistory: `${API_BASE_URL}/order`,
+    getOrderHistory: `${API_BASE_URL}/order/history`,
     updateOrderStatus: (orderId) => `${API_BASE_URL}/order/${orderId}/status`,
-    getShippingDetails: (orderId) => `${API_BASE_URL}/order/${orderId}/shipping`
-  },
-  search: {
-    searchProducts: `${API_BASE_URL}/search`,
-    filterProducts: `${API_BASE_URL}/search/filter`
-  },
-  seller: {
-    listNewProduct: `${API_BASE_URL}/seller/products`,
-    editProductDetails: (productId) => `${API_BASE_URL}/seller/products/${productId}`,
-    removeProduct: (productId) => `${API_BASE_URL}/seller/products/${productId}`,
-    getproducts: `${API_BASE_URL}/seller/getproducts`,
-    viewSales: `${API_BASE_URL}/seller/sales`,
-    viewOrdersForProduct: (productId) => `${API_BASE_URL}/seller/orders/${productId}`,
-    shipOrder: (orderId) => `${API_BASE_URL}/seller/orders/${orderId}/ship`,
-    manageInventory: `${API_BASE_URL}/seller/inventory`
+    getShippingDetails: (orderId) => `${API_BASE_URL}/order/${orderId}/shipping`,
+    viewSales: `${API_BASE_URL}/order/sales`,
+    viewOrdersForProduct: (productId) => `${API_BASE_URL}/order/product/${productId}`,
+    shipOrder: (orderId) => `${API_BASE_URL}/order/${orderId}/ship`
   },
   product: {
     getAllProducts: `${API_BASE_URL}/products`,
     getProductById: (productId) => `${API_BASE_URL}/products/${productId}`,
     getFeaturedProducts: `${API_BASE_URL}/products/featured`,
     getRecommendedProducts: `${API_BASE_URL}/products/recommended`,
-    calculatePrice: `${API_BASE_URL}/products/calculate-price`
+    calculatePrice: `${API_BASE_URL}/products/calculate-price`,
+    create: `${API_BASE_URL}/products/create`,
+    edit: (productId) => `${API_BASE_URL}/products/edit/${productId}`,
+    remove: (productId) => `${API_BASE_URL}/products/remove/${productId}`,
+    sellerProducts: `${API_BASE_URL}/products/seller/products`,
+    manageInventory: `${API_BASE_URL}/products/inventory`
+  },
+  review: {
+    create: `${API_BASE_URL}/review`,
+    update: (reviewId) => `${API_BASE_URL}/review/${reviewId}`,
+    delete: (reviewId) => `${API_BASE_URL}/review/${reviewId}`
   }
 };
 

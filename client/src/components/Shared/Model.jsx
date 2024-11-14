@@ -18,14 +18,15 @@ const Modal = ({ title, content, className="" }) => {
       </button>
       <dialog ref={modalRef} className="modal">
         <div className="modal-box">
-          <button
+          <div
             onClick={closeModal}
+            role="button"
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
           >
             ✕
-          </button>
+          </div>
           <h3 className="font-bold text-lg">{title}</h3>
-          <p className="py-4">{content}</p>
+          <div className="py-4">{content}</div>
         </div>
         <form method="dialog" className="modal-backdrop">
           <button onClick={closeModal}>Close</button>
