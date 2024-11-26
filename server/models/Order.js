@@ -6,10 +6,36 @@ const orderSchema = new mongoose.Schema({
     product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
+    seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    status: {
+      type: String,
+      enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'return_requested', 'return_approved', 'return_rejected'],
+      default: 'pending'
+    },
+    selectedVariations: [{
+      name: String,
+      option: String,
+      price: Number
+    }]
   }],
   totalAmount: { type: Number, required: true },
   shippingAddress: { type: String, required: true },
-  status: { type: String, enum: ['pending', 'shipped', 'delivered', 'cancelled'], default: 'pending' },
+  status: {
+    type: String,
+    enum: [
+      'pending',
+      'processing',
+      'shipped',
+      'delivered',
+      'cancelled',
+      'return_requested',
+      'return_approved',
+      'return_rejected'
+    ],
+    default: 'pending'
+  },
+  returnReason: { type: String },
+  returnRequestDate: { type: Date },
   createdAt: { type: Date, default: Date.now },
 });
 

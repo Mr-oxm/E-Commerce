@@ -10,7 +10,10 @@ const {
     editProductDetails,
     removeProduct,
     getSellerProducts,
-    manageInventory
+    manageInventory,
+    searchProducts,
+    filterProducts,
+    getSellerProductsById
 } = require('../controllers/productController');
 
 const router = express.Router();
@@ -19,6 +22,9 @@ const router = express.Router();
 router.get('/', getAllProducts);
 router.get('/featured', getFeaturedProducts);
 router.get('/recommended', getRecommendedProducts);
+router.get('/search', searchProducts);
+router.get('/filter', filterProducts);
+router.get('/seller/products/:id', getSellerProductsById);
 router.get('/:id', getProductById);
 router.post('/calculate-price', calculatePrice);
 

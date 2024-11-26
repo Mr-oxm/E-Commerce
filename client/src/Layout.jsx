@@ -10,13 +10,13 @@ const Layout = ({children}) => {
     const navigate = useNavigate();
 
     if(user && needsOnboarding){
-        navigate('/profile');
+        navigate('/onboarding');
     }
 
     return (
         <div className='flex flex-col h-screen min-h-screen selection:bg-primary selection:text-base-content' data-theme={useThemeContext().theme}>
             <Navbar className="sticky top-0 z-50" />
-            <div className='flex-1 overflow-y-auto bg-base-200 h-[calc(100vh-66px-8px)]'>
+            <div className='flex-1 flex flex-col  justify-between overflow-y-auto bg-base-200 h-[calc(100vh-66px-8px)]'>
                 {children}
                 <Footer />
             </div>

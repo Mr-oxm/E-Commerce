@@ -12,11 +12,12 @@ import Drawer from '../../components/Shared/Drawer';
 const SellerDashboard = () => {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchProducts();
-    // fetchOrders();
+    fetchOrders();
   }, []);
 
   const fetchProducts = async () => {
@@ -29,12 +30,15 @@ const SellerDashboard = () => {
   };
 
   const fetchOrders = async () => {
-    // try {
-    //   const response = await axios.get(routes.order.viewSales);
-    //   setOrders(response.data.data);
-    // } catch (error) {
-    //   console.error('Error fetching orders:', error);
-    // }
+    try {
+      setLoading(true);
+      const response = await axios.get(routes.order.viewSales);
+      setOrders(response.data.data);
+    } catch (error) {
+      console.error('Error fetching orders:', error.response?.data || error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleProductSaved = () => {
@@ -44,7 +48,7 @@ const SellerDashboard = () => {
 
 
   return (
-    <div className="flex h-max min-h-screen">
+    <div className="flex">
       <div className='min-h-full lg:py-4 lg:pl-4'>
         <Drawer sidebarContent={<SellerNav/>} label={<FaBars/>} labelStyles={"hidden"}/>
       </div>
@@ -64,7 +68,16 @@ const SellerDashboard = () => {
             <Route index element={<ProductList products={products} onProductUpdate={fetchProducts}/>} />
             <Route path="add-product" element={<AddEditProduct onProductSaved={handleProductSaved} />} />
             <Route path="edit-product/:id" element={<AddEditProduct onProductSaved={handleProductSaved}/>} />
-            <Route path="orders" element={<OrderList orders={orders} />} />
+            <Route 
+              path="orders" 
+              element={
+                <OrderList 
+                  orders={orders} 
+                  loading={loading}
+                  onStatusUpdate={fetchOrders}
+                />
+              } 
+            />
             <Route path="sales" element={<SalesSummary orders={orders} />} />
           </Routes>
         </div>

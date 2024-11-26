@@ -1,16 +1,25 @@
-import { useContext } from 'react'
-import { Link } from 'react-router-dom';
+import { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { useThemeContext } from '../../context/themeContext';
 import { themes } from '../../constants/themes';
 import Modal from './Model';
 import { useShoppingCart } from '../../context/ShoppingCartContext';
 // Import icons
-import { FaShoppingCart, FaUser, FaSignInAlt, FaCog, FaPalette, FaSignOutAlt, FaChartBar } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaSignInAlt, FaCog, FaPalette, FaSignOutAlt, FaChartBar, FaHistory } from 'react-icons/fa';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
     const { getCartItemsCount, getCartTotal } = useShoppingCart();
+    const navigate = useNavigate();
+    const [searchInput, setSearchInput] = useState('');
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchInput.trim()) {
+            navigate(`/search?keyword=${encodeURIComponent(searchInput.trim())}`);
+        }
+    };
 
     return (
         <div className="navbar bg-base-100 z-40">
@@ -23,19 +32,27 @@ const Navbar = () => {
 
             {/* Navbar center (unchanged) */}
             <div className="navbar-center min-w-96 hidden md:flex">
-                <label className="input group focus-within:outline-none focus-within:ring-0 focus-within:border-primary bg-base-200 flex items-center gap-2 w-full">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 16 16"
-                        fill="currentColor"
-                        className="h-4 w-4 opacity-70">
-                        <path
-                        fillRule="evenodd"
-                        d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                        clipRule="evenodd" />
-                    </svg>
-                    <input type="text" className="grow " placeholder="Search" />
-                </label>
+                <form onSubmit={handleSearch} className="w-full">
+                    <label className="input group focus-within:outline-none focus-within:ring-0 focus-within:border-primary bg-base-200 flex items-center gap-2 w-full">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 16 16"
+                            fill="currentColor"
+                            className="h-4 w-4 opacity-70">
+                            <path
+                            fillRule="evenodd"
+                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                            clipRule="evenodd" />
+                        </svg>
+                        <input
+                            type="text"
+                            className="grow border-0"
+                            placeholder="Search"
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                        />
+                    </label>
+                </form>
             </div>
 
             {/* Navbar end */}
@@ -121,7 +138,14 @@ const UserIcon = ({user, logout}) => {
                 <li className='font-bold text-lg p-2'>{user.profile.fullName}</li>
                 <div className='divider !p-0 !m-0'></div>
                 <li>
-                    <a className="flex items-center"><FaUser className="mr-2" /> Profile</a>
+                    <Link to={`/profile/${user._id}`} className="flex items-center">
+                        <FaUser className="mr-2" /> Profile
+                    </Link>
+                </li>
+                <li>
+                    <Link to="/order-history" className="flex items-center">
+                        <FaHistory className="mr-2" /> Order History
+                    </Link>
                 </li>
                 <li>
                     <Link to="/dashboard" className="flex items-center">

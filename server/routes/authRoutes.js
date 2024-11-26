@@ -9,7 +9,8 @@ const {
     verifyEmail, 
     changePassword, 
     getUserData,
-    updateUserData 
+    updateUserData,
+    getUserById
   } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 
@@ -24,5 +25,6 @@ router.put('/verifyemail', protect, verifyEmail);
 router.put('/changepassword', protect, changePassword);
 router.get('/user', protect, getUserData);
 router.post('/updateuser', protect, updateUserData);
+router.get('/user/:id', getUserById);
 
 module.exports = router;

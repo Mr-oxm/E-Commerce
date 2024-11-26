@@ -15,7 +15,7 @@ const Signup = () => {
     if (user && !needsOnboarding) {
       navigate('/');
     }else if(user && needsOnboarding){
-      navigate('/profile');
+      navigate('/onboarding');
     }
   }, [user, needsOnboarding]);
 
@@ -28,7 +28,7 @@ const Signup = () => {
     try {
       const needsOnboarding = await signup(username, email, password);
       if (needsOnboarding) {
-        navigate('/profile')
+        navigate('/onboarding')
       } else {
         navigate('/')
       }
@@ -51,9 +51,9 @@ const Signup = () => {
           <Link to="/login" className='text-primary'>Log in</Link>
         </p>
       </div>
-      <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required className="input w-full focus:outline-none focus:ring-0 focus:border-primary bg-base-200"/>
-      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required className="input w-full focus:outline-none focus:ring-0 focus:border-primary bg-base-200"/>
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required className="input w-full focus:outline-none focus:ring-0 focus:border-primary bg-base-200"/>
+      <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required  />
+      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required  />
+      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required  />
       <button type="submit" className='btn btn-primary'>Sign Up</button>
     </form>
   );

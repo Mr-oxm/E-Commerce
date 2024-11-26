@@ -14,7 +14,7 @@ const Login = () => {
     if (user && !needsOnboarding) {
       navigate('/');
     }else if(user && needsOnboarding){
-      navigate('/profile');
+      navigate('/onboarding');
     }
   }, [user, needsOnboarding]);
 
@@ -27,7 +27,7 @@ const Login = () => {
     try {
       const needsOnboarding = await login(email, password);
       if (needsOnboarding) {
-        navigate('/profile');
+        navigate('/onboarding');
       } else {
         navigate('/')
       }
@@ -50,8 +50,8 @@ const Login = () => {
           <Link to="/signup" className='text-primary'>Sign up</Link>
         </p>
       </div>
-      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required className="input w-full focus:outline-none focus:ring-0 focus:border-primary bg-base-200"/>
-      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required className="input w-full focus:outline-none focus:ring-0 focus:border-primary bg-base-200"/>
+      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required  />
+      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required  />
       <button type="submit" className='btn btn-primary'>Log In</button>
     </form>
   );

@@ -16,7 +16,7 @@ const Modal = ({ title, content, className="" }) => {
       <button onClick={openModal} className={className}>
         {title}
       </button>
-      <dialog ref={modalRef} className="modal">
+      <dialog ref={modalRef} className="modal flex justify-center items-center">
         <div className="modal-box">
           <div
             onClick={closeModal}
@@ -28,9 +28,9 @@ const Modal = ({ title, content, className="" }) => {
           <h3 className="font-bold text-lg">{title}</h3>
           <div className="py-4">{content}</div>
         </div>
-        <form method="dialog" className="modal-backdrop">
+        {/* <form method="dialog" className="modal-backdrop">
           <button onClick={closeModal}>Close</button>
-        </form>
+        </form> */}
       </dialog>
     </>
   );

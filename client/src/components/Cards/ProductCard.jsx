@@ -5,7 +5,9 @@ import { useShoppingCart } from '../../context/ShoppingCartContext';
 const ProductCard = ({ product }) => {
   const { addToCart, cartItems } = useShoppingCart();
   const isInCart = cartItems.some(item => item._id === product._id);
-
+  const averageRating = product.ratings.length > 0
+    ? (product.ratings.reduce((sum, rating) => sum + rating.rating, 0) / product.ratings.length).toFixed(1)
+    : 'No ratings';
   return (
     <div className="card w-full bg-base-100 border border-transparent hover:border-primary transition-all duration-300 hover:shadow-lg">
         <Link to={`/product/${product._id}`}>
@@ -17,10 +19,14 @@ const ProductCard = ({ product }) => {
             <Link to={`/product/${product._id}`}>
                 <h2 className="card-title text-base-content hover:text-primary ease-in-out transition-all truncate">{product.name}</h2>
             </Link >
-            <p className="text-gray-600 text-sm mb-2 truncate">{product.description}</p>
+            <p className="text-gray-600 text-sm mb-2 truncate">
+                {product.description}
+            </p>
             <div className="flex items-center mb-2">
                 <FaStar className="text-yellow-400 mr-1" />
-                <span>{product.ratings.length > 0 ? product.ratings.reduce((a, b) => a + b.rating, 0) / product.ratings.length : 'No ratings'}</span>
+                <span>
+                  {averageRating}
+                </span>
             </div>
             <div className="flex gap-4 justify-between items-center">
                 <span className="text-xl font-bold flex-1 truncate">${product.price.toFixed(2)}</span>

@@ -11,9 +11,16 @@ const userSchema = new mongoose.Schema({
     resetPasswordExpire: Date,
     profile: {
       fullName: String,
-      address: String,
-      phoneNumber: String,
-      bio: String
+      addresses: [{ 
+        type: String,
+        label: String // e.g., "Home", "Work", etc.
+      }],
+      phoneNumbers: [{
+        type: String,
+        label: String
+      }],
+      bio: String,
+      profilePhoto: String
     }
   });
 

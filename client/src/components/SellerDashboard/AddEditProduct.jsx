@@ -13,9 +13,15 @@ const AddEditProduct = ({ onProductSaved }) => {
     category: [],
     stock: '',
     images: [],
+    hasVariations: false,
+    variations: [],
+    basePrice: ''
   });
   const [previewImage, setPreviewImage] = useState('');
   const [newImageUrl, setNewImageUrl] = useState('');
+  const [newVariation, setNewVariation] = useState({ name: '', options: [] });
+  const [newOption, setNewOption] = useState({ name: '', price: '', stock: '' });
+  const [editingVariation, setEditingVariation] = useState(null);
 
   const { id } = useParams();
 
@@ -88,12 +94,89 @@ const AddEditProduct = ({ onProductSaved }) => {
           category: [],
           stock: '',
           images: [],
+          hasVariations: false,
+          variations: [],
+          basePrice: ''
         });
         setPreviewImage('');
       }
     } catch (error) {
       console.error('Error saving product:', error);
     }
+  };
+
+  const handleEditVariation = (variation, index) => {
+    setEditingVariation({ ...variation, index });
+    setNewVariation({ ...variation });
+  };
+
+  const handleOptionUpdate = (optionIndex, field, value) => {
+    setNewVariation(prev => ({
+      ...prev,
+      options: prev.options.map((opt, idx) => 
+        idx === optionIndex 
+          ? { 
+              ...opt, 
+              [field]: value,
+              ...(field === 'price' && value 
+                ? { priceNote: `+$${value} from base price` } 
+                : {})
+            } 
+          : opt
+      )
+    }));
+  };
+
+  const handleRemoveOption = (optionIndex) => {
+    setNewVariation(prev => ({
+      ...prev,
+      options: prev.options.filter((_, idx) => idx !== optionIndex)
+    }));
+  };
+
+  const handleAddVariation = () => {
+    if (newVariation.name && newVariation.options.length > 0) {
+      setProductData(prev => ({
+        ...prev,
+        variations: editingVariation
+          ? prev.variations.map((v, i) => 
+              i === editingVariation.index ? { ...newVariation } : v
+            )
+          : [...prev.variations, { ...newVariation }]
+      }));
+      setNewVariation({ name: '', options: [] });
+      setEditingVariation(null);
+    }
+  };
+
+  const handleAddOption = () => {
+    if (newOption.name && newOption.stock) {
+      setNewVariation(prev => ({
+        ...prev,
+        options: [...prev.options, { 
+          ...newOption,
+          ...(newOption.price ? { priceNote: `+$${newOption.price} from base price` } : {})
+        }]
+      }));
+      setNewOption({ name: '', price: '', stock: '' });
+    }
+  };
+
+  const handleRemoveVariation = (index) => {
+    setProductData(prev => ({
+      ...prev,
+      variations: prev.variations.filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleVariationsToggle = (e) => {
+    const hasVariations = e.target.checked;
+    setProductData(prev => ({
+      ...prev,
+      hasVariations,
+      basePrice: hasVariations ? prev.price : '',
+      variations: []
+    }));
   };
 
   return (
@@ -124,7 +207,6 @@ const AddEditProduct = ({ onProductSaved }) => {
               value={productData.description}
               onChange={handleInputChange}
               placeholder="Description"
-              className="textarea bg-base-200 focus:outline-none focus:ring-0 focus:border-primary h-24"
               required
             />
           </div>
@@ -216,6 +298,240 @@ const AddEditProduct = ({ onProductSaved }) => {
                 <span className="label-text">Preview</span>
               </label>
               <img src={previewImage} alt="Preview" className="w-full h-64 object-contain" />
+            </div>
+          )}
+          <div className="form-control">
+            <label className="label cursor-pointer">
+              <span className="label-text">Enable Product Variations</span>
+              <input
+                type="checkbox"
+                checked={productData.hasVariations}
+                onChange={handleVariationsToggle}
+                className="checkbox checkbox-primary"
+              />
+            </label>
+          </div>
+          {productData.hasVariations && (
+            <div className="form-control space-y-4">
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold mb-4">Product Variations</h3>
+                
+                {productData.variations.map((variation, index) => (
+                  <div key={index} className="card bg-base-200 mb-4">
+                    <div className="card-body p-4">
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-medium">{variation.name}</h4>
+                        <div className="space-x-2">
+                          <button
+                            type="button"
+                            onClick={() => handleEditVariation(variation, index)}
+                            className="btn btn-sm btn-ghost"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveVariation(index)}
+                            className="btn btn-sm btn-error"
+                          >
+                            <FiX />
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {editingVariation?.index === index ? (
+                        <div className="space-y-4 mt-4">
+                          <input
+                            type="text"
+                            value={newVariation.name}
+                            onChange={(e) => setNewVariation(prev => ({ ...prev, name: e.target.value }))}
+                            placeholder="Variation Name"
+                            className="input input-bordered w-full"
+                          />
+                          
+                          {newVariation.options.map((option, optIndex) => (
+                            <div key={optIndex} className="flex gap-2 items-center">
+                              <input
+                                type="text"
+                                value={option.name}
+                                onChange={(e) => handleOptionUpdate(optIndex, 'name', e.target.value)}
+                                placeholder="Option Name"
+                                className="input input-bordered flex-1"
+                              />
+                              <div className="relative w-32">
+                                <input
+                                  type="number"
+                                  value={option.price}
+                                  onChange={(e) => handleOptionUpdate(optIndex, 'price', e.target.value)}
+                                  placeholder="Extra Price"
+                                  className="input input-bordered w-full"
+                                />
+                              </div>
+                              <input
+                                type="number"
+                                value={option.stock}
+                                onChange={(e) => handleOptionUpdate(optIndex, 'stock', e.target.value)}
+                                placeholder="Stock"
+                                className="input input-bordered w-32"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveOption(optIndex)}
+                                className="btn btn-error btn-square"
+                              >
+                                <FiX />
+                              </button>
+                            </div>
+                          ))}
+                          
+                          {/* Option adding form */}
+                          <div className="flex gap-2 mb-4">
+                            <input
+                              type="text"
+                              value={newOption.name}
+                              onChange={(e) => setNewOption(prev => ({ ...prev, name: e.target.value }))}
+                              placeholder="Option (e.g., XL, Red)"
+                              className="input input-bordered flex-1"
+                            />
+                            <div className="relative w-32">
+                              <input
+                                type="number"
+                                value={newOption.price}
+                                onChange={(e) => setNewOption(prev => ({ ...prev, price: e.target.value }))}
+                                placeholder="Extra Price"
+                                className="input input-bordered w-full"
+                              />
+                              <span className="absolute text-xs text-gray-500 -bottom-5 left-0">
+                                {newOption.price 
+                                  ? `Total: $${Number(productData.basePrice) + Number(newOption.price)}`
+                                  : ''}
+                              </span>
+                            </div>
+                            <input
+                              type="number"
+                              value={newOption.stock}
+                              onChange={(e) => setNewOption(prev => ({ ...prev, stock: e.target.value }))}
+                              placeholder="Stock"
+                              className="input input-bordered w-32"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleAddOption}
+                              className="btn btn-primary"
+                            >
+                              Add Option
+                            </button>
+                          </div>
+                          
+                          <div className="flex gap-2 justify-end mt-4">
+                            <button
+                              type="button"
+                              onClick={() => setEditingVariation(null)}
+                              className="btn btn-ghost"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleAddVariation}
+                              className="btn btn-primary"
+                            >
+                              Save Changes
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="overflow-x-auto">
+                          <table className="table table-compact w-full">
+                            <thead>
+                              <tr>
+                                <th>Option</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {variation.options.map((option, optIndex) => (
+                                <tr key={optIndex}>
+                                  <td>{option.name}</td>
+                                  <td>
+                                    {option.price 
+                                      ? `+$${option.price} (Total: $${Number(productData.basePrice) + Number(option.price)})`
+                                      : `$${productData.basePrice}`}
+                                  </td>
+                                  <td>{option.stock}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                <div className="card bg-base-200">
+                  <div className="card-body p-4">
+                    <h4 className="font-medium mb-4">
+                      {editingVariation ? 'Edit Variation' : 'Add New Variation'}
+                    </h4>
+                    <input
+                      type="text"
+                      value={newVariation.name}
+                      onChange={(e) => setNewVariation(prev => ({ ...prev, name: e.target.value }))}
+                      placeholder="Variation Name (e.g., Size, Color)"
+                      className="input input-bordered w-full mb-4"
+                    />
+
+                    <div className="flex gap-2 mb-4">
+                      <input
+                        type="text"
+                        value={newOption.name}
+                        onChange={(e) => setNewOption(prev => ({ ...prev, name: e.target.value }))}
+                        placeholder="Option (e.g., XL, Red)"
+                        className="input input-bordered flex-1"
+                      />
+                      <div className="relative w-32">
+                        <input
+                          type="number"
+                          value={newOption.price}
+                          onChange={(e) => setNewOption(prev => ({ ...prev, price: e.target.value }))}
+                          placeholder="Extra Price"
+                          className="input input-bordered w-full"
+                        />
+                        <span className="absolute text-xs text-gray-500 -bottom-5 left-0">
+                          {newOption.price 
+                            ? `Total: $${Number(productData.basePrice) + Number(newOption.price)}`
+                            : ''}
+                        </span>
+                      </div>
+                      <input
+                        type="number"
+                        value={newOption.stock}
+                        onChange={(e) => setNewOption(prev => ({ ...prev, stock: e.target.value }))}
+                        placeholder="Stock"
+                        className="input input-bordered w-32"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleAddOption}
+                        className="btn btn-primary"
+                      >
+                        Add Option
+                      </button>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleAddVariation}
+                      className="btn btn-secondary w-full"
+                      disabled={!newVariation.name || newVariation.options.length === 0}
+                    >
+                      {editingVariation ? 'Update Variation' : 'Add Variation'}
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
           <div className="form-control mt-6">

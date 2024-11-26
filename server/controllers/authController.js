@@ -137,7 +137,16 @@ exports.getUserData = async (req, res) => {
 
 exports.updateUserData = async (req, res) => {
   try {
-    const allowedUpdates = ['username', 'email', 'profile.fullName', 'profile.address', 'profile.phoneNumber', 'profile.bio'];
+    const allowedUpdates = [
+      'username', 
+      'email', 
+      'profile.fullName', 
+      'profile.addresses', 
+      'profile.phoneNumbers', 
+      'profile.bio',
+      'profile.profilePhoto'
+    ];
+    
     const updates = Object.keys(req.body);
     const isValidOperation = updates.every(update => allowedUpdates.includes(update));
 
@@ -160,11 +169,32 @@ exports.updateUserData = async (req, res) => {
     });
 
     await user.save();
-
-    const needsOnboarding = !user.profile.fullName;
-    res.status(200).json({ success: true, data: user, needsOnboarding });
+    res.status(200).json({ success: true, data: user });
   } catch (error) {
     console.error('Update user data error:', error);
     res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+exports.getUserById = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: user
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Server Error'
+    });
   }
 };

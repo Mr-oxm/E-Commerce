@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import ProductCard from '../Cards/ProductCard';
+import { Link } from 'react-router-dom';
 
 const CategoryProductsSlider = ({ category, products }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -32,7 +33,12 @@ const CategoryProductsSlider = ({ category, products }) => {
 
   return (
     <div className="w-full mb-4">
-      <h2 className="text-2xl font-bold mb-4">{category}</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">{category}</h2>
+        <Link to={`/search?category=${category}`}>
+          <button className="btn btn-sm btn-ghost">View All</button>
+        </Link>
+      </div>
       <div className="relative">
         <div 
           ref={sliderRef}

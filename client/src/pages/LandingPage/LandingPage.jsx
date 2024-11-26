@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { AiOutlineLoading } from "react-icons/ai";
 import CategoryProductsSlider from '../../components/Shared/CategoryProductsSlider';
 import routes from '../../constants/routes';
 import { categories } from '../../constants/categories';
+import LoadingAnimation from '../../components/Shared/LoadingAnimation';
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
@@ -24,7 +26,7 @@ const LandingPage = () => {
     fetchProducts();
   }, []);
 
-  if (loading) return <div className="text-center h-full">Loading...</div>;
+  if (loading) return <LoadingAnimation />;
   if (error) return <div className="text-center text-red-500">{error}</div>;
 
   const getProductsByCategory = (category) => {
