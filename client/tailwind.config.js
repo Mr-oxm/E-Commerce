@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+const { withUt } = require("uploadthing/tw");
+export default withUt({
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -43,4 +44,4 @@ export default {
       "winter",
   ],
   },
-}
+});

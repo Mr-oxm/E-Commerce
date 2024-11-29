@@ -4,7 +4,7 @@ const Product = require('../models/Product');
 
 exports.createOrder = async (req, res) => {
   try {
-    const { products, shippingAddress } = req.body;
+    const { products, shippingAddress, phoneNumber, paymentMethod } = req.body;
     
     if (!products || !Array.isArray(products) || products.length === 0) {
       return res.status(400).json({ 
@@ -17,6 +17,20 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({
         success: false,
         error: 'Shipping address is required'
+      });
+    }
+
+    if (!phoneNumber) {
+      return res.status(400).json({
+        success: false,
+        error: 'Phone number is required'
+      });
+    }
+
+    if (!paymentMethod) {
+      return res.status(400).json({
+        success: false,
+        error: 'Payment method is required'
       });
     }
 
@@ -61,6 +75,8 @@ exports.createOrder = async (req, res) => {
       products: orderProducts,
       totalAmount,
       shippingAddress,
+      phoneNumber,
+      paymentMethod,
       status: 'pending'
     });
 

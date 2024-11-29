@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => {
     ? (product.ratings.reduce((sum, rating) => sum + rating.rating, 0) / product.ratings.length).toFixed(1)
     : 'No ratings';
   return (
-    <div className="card w-full bg-base-100 border border-transparent hover:border-primary transition-all duration-300 hover:shadow-lg">
+    <div className="card w-full bg-base-100 border border-transparent hover:border-primary transition-all duration-300">
         <Link to={`/product/${product._id}`}>
             <figure>
                 <img src={product.images[0]} alt={product.name} className="h-48 w-full object-contain" />

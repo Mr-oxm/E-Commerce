@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FaBox, FaTruck, FaUndo, FaTimes } from 'react-icons/fa';
+import { FaBox, FaTruck, FaUndo, FaTimes, FaPhone, FaCreditCard } from 'react-icons/fa';
 import routes from '../../constants/routes';
 import { useParams } from 'react-router-dom';
 import Modal from '../Shared/Model';
@@ -209,20 +209,42 @@ const OrderDetails = () => {
             </table>
           </div>
 
-          <div className="mt-8 space-y-4">
-            <div className="flex justify-between items-center text-lg">
+          <div className="mt-8">
+            <div className="flex justify-between items-center text-lg p-4 rounded-lg">
               <span className="font-semibold">Total Amount:</span>
               <span className="font-bold">${order.totalAmount.toFixed(2)}</span>
             </div>
-            
-            <div className="flex items-start gap-2">
-              <FaTruck className="mt-1 text-primary" />
-              <div>
-                <span className="font-semibold">Shipping Address:</span>
-                <p className="text-base-content/70">{order.shippingAddress}</p>
-              </div>
-            </div>
 
+
+            <div className="card-body flex md:flex-row flex-col gap-6 items-center flex-wrap">
+              <div className="flex items-center gap-3">
+                <FaTruck className="text-xl text-primary" />
+                <div>
+                  <h3 className="font-semibold">Shipping Address</h3>
+                  <p className="text-base-content/70">{order.shippingAddress}</p>
+                </div>
+              </div>
+              
+              {order.phoneNumber && (
+                
+                <div className="flex items-center gap-3">
+                  <FaPhone className="text-xl text-primary" />
+                  <div>
+                    <h3 className="font-semibold">Contact Phone</h3>
+                    <p className="text-base-content/70">{order.phoneNumber}</p>
+                  </div>
+                </div>
+              )}
+              {order.paymentMethod && (
+                <div className="flex items-center gap-3">
+                  <FaCreditCard className="text-xl text-primary" />
+                  <div>
+                    <h3 className="font-semibold">Payment Method</h3>
+                    <p className="text-base-content/70">{order.paymentMethod.toUpperCase()}</p>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {order.products.every(p => p.status === 'pending') && (
               <Modal 

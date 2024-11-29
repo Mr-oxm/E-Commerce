@@ -12,11 +12,11 @@ const userSchema = new mongoose.Schema({
     profile: {
       fullName: String,
       addresses: [{ 
-        type: String,
-        label: String // e.g., "Home", "Work", etc.
+        value: String,
+        label: String
       }],
       phoneNumbers: [{
-        type: String,
+        value: String,
         label: String
       }],
       bio: String,

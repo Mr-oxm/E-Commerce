@@ -46,6 +46,9 @@ const routes = {
     create: `${API_BASE_URL}/reviews`,
     update: (reviewId) => `${API_BASE_URL}/reviews/${reviewId}`,
     delete: (reviewId) => `${API_BASE_URL}/reviews/${reviewId}`
+  },
+  upload: {
+    uploadImage: `${API_BASE_URL}/uploadthing`,
   }
 };
 

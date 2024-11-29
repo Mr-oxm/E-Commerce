@@ -1,12 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import routes from '../../constants/routes';
 import { AuthContext } from '../../context/AuthContext';
 import LoadingAnimation from '../Shared/LoadingAnimation';
-import { FaTruck } from 'react-icons/fa';
+import { FaTruck, FaPhone, FaCreditCard, FaSort } from 'react-icons/fa';
 
 const OrderList = ({ orders, loading, onStatusUpdate }) => {
   const { user } = useContext(AuthContext);
+  const [sortDirection, setSortDirection] = useState('desc');
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  const sortedAndFilteredOrders = orders
+    ?.filter(order => {
+      if (statusFilter === 'all') return true;
+      return order.products.some(p => 
+        p.seller.toString() === user._id && p.status === statusFilter
+      );
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return sortDirection === 'desc' ? dateB - dateA : dateA - dateB;
+    });
 
   const handleStatusChange = async (orderId, productId, status) => {
     try {
@@ -57,9 +72,38 @@ const OrderList = ({ orders, loading, onStatusUpdate }) => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold mb-4">Orders Management</h2>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h2 className="text-2xl font-bold">Orders Management</h2>
+        
+        <div className="flex flex-wrap gap-4">
+          <select
+            className="select select-bordered select-sm"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="return_requested">Return Requested</option>
+            <option value="return_approved">Return Approved</option>
+            <option value="return_rejected">Return Rejected</option>
+          </select>
+
+          <button
+            className="btn btn-outline gap-2 btn-sm"
+            onClick={() => setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')}
+          >
+            <FaSort />
+            {sortDirection === 'asc' ? 'Newest First' : 'Oldest First'}
+          </button>
+        </div>
+      </div>
+
       <div className="overflow-x-auto">
-        {orders.map((order) => {
+        {sortedAndFilteredOrders.map((order) => {
           // Filter products for this seller
           const sellerProducts = order.products.filter(p => p.seller.toString() === user._id);
           
@@ -68,17 +112,35 @@ const OrderList = ({ orders, loading, onStatusUpdate }) => {
 
           return (
             <div key={order._id} className="mb-8 bg-base-100 card p-4 overflow-x-auto">
-              <div className=" pb-4">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-                  <div className='flex justify-between items-center'>
-                    <span className="font-bold">Order #{order._id}</span>
-                    <span className="mx-4 text-sm opacity-70">
-                      {new Date(order.createdAt).toLocaleDateString()}
-                    </span>
+              <div className="pb-4">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold">Order #{order._id}</span>
+                      <span className="text-sm opacity-70">
+                        {new Date(order.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <div className="text-sm">
+                      <span className="opacity-70">Buyer: </span>
+                      <span className="font-medium">{order.buyer?.profile?.fullName || 'Anonymous'}</span>
+                    </div>
                   </div>
-                  <div className="text-sm">
-                    <span className="opacity-70">Buyer: </span>
-                    <span className="font-medium">{order.buyer?.profile?.fullName || 'Anonymous'}</span>
+                  <div className="flex flex-wrap gap-4 text-sm">
+                    {order.phoneNumber && (
+                      <div className="flex items-center gap-2">
+                        <span className="badge badge-ghost">
+                          <FaPhone className="mr-2" /> {order.phoneNumber}
+                        </span>
+                      </div>
+                    )}
+                    {order.paymentMethod && (
+                      <div className="flex items-center gap-2">
+                        <span className="badge badge-ghost">
+                          <FaCreditCard className="mr-2" /> {order.paymentMethod.toUpperCase()}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

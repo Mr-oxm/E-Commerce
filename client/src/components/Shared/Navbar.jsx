@@ -129,7 +129,7 @@ const UserIcon = ({user, logout}) => {
                 <div className="w-10 rounded-full">
                 <img
                     alt="User Avatar"
-                    src="https://static-00.iconduck.com/assets.00/user-avatar-happy-icon-2048x2048-ssmbv1ou.png" />
+                    src={user.profile.profilePhoto || "https://static-00.iconduck.com/assets.00/user-avatar-happy-icon-2048x2048-ssmbv1ou.png"} />
                 </div>
             </div>
             <ul
@@ -153,7 +153,7 @@ const UserIcon = ({user, logout}) => {
                     </Link>
                 </li>
                 <li>
-                    <a className="flex items-center"><FaCog className="mr-2" /> Settings</a>
+                    <Link to="/settings" className="flex items-center"><FaCog className="mr-2" /> Settings</Link>
                 </li>
                 <li>
                     <div className="flex items-center">

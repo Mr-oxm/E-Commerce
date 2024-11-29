@@ -5,6 +5,92 @@ import routes from '../../constants/routes';
 import LoadingAnimation from '../../components/Shared/LoadingAnimation';
 import ProductCard from '../../components/Cards/ProductCard';
 import { useParams } from 'react-router-dom';
+import { FaUser, FaEnvelope, FaStar, FaBox } from 'react-icons/fa';
+
+const ProfileSection = ({ profileData, isOwnProfile, products }) => {
+  // Calculate average rating across all products
+  const averageRating = products.length > 0
+    ? (products.reduce((sum, product) => {
+        const productRating = product.ratings.length > 0
+          ? product.ratings.reduce((rSum, r) => rSum + r.rating, 0) / product.ratings.length
+          : 0;
+        return sum + productRating;
+      }, 0) / products.length).toFixed(1)
+    : 'No ratings';
+
+  // Calculate total number of ratings
+  const totalRatings = products.reduce((sum, product) => sum + product.ratings.length, 0);
+
+  return (
+    <div className="card bg-base-200">
+      <div className="card-body">
+        <div className="flex flex-col gap-8">
+          {/* Avatar Section */}
+          <div className="flex flex-col items-center gap-4">
+            <div className="avatar">
+              <div className="w-40 h-40 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                <img
+                  src={profileData?.profile?.profilePhoto || "https://static-00.iconduck.com/assets.00/user-avatar-happy-icon-2048x2048-ssmbv1ou.png"}
+                  alt="Profile"
+                />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold text-center">{profileData?.profile?.fullName}</h1>
+          </div>
+
+          {/* Info Section */}
+          <div className="flex-1 space-y-4">
+            <div className="stats stats-vertical lg:stats-horizontal  w-full">
+              <div className="stat">
+                <div className="stat-figure text-secondary">
+                  <FaUser className="text-2xl" />
+                </div>
+                <div className="stat-title">Username</div>
+                <div className="stat-value text-lg">{profileData?.username}</div>
+              </div>
+
+              {isOwnProfile && (
+                <div className="stat">
+                  <div className="stat-figure text-secondary">
+                    <FaEnvelope className="text-2xl" />
+                  </div>
+                  <div className="stat-title">Email</div>
+                  <div className="stat-value text-lg">{profileData?.email}</div>
+                </div>
+              )}
+
+              <div className="stat">
+                <div className="stat-figure text-secondary">
+                  <FaStar className="text-2xl text-yellow-400" />
+                </div>
+                <div className="stat-title">Average Rating</div>
+                <div className="stat-value text-lg flex items-center gap-2">
+                  {averageRating}
+                  <span className="text-sm text-gray-500">({totalRatings} reviews)</span>
+                </div>
+              </div>
+
+              <div className="stat">
+                <div className="stat-figure text-secondary">
+                  <FaBox className="text-2xl" />
+                </div>
+                <div className="stat-title">Products</div>
+                <div className="stat-value text-lg">{products.length}</div>
+              </div>
+            </div>
+
+            {profileData?.profile?.bio && (
+              <div className="bg-base-100 p-4 rounded-lg">
+                <h3 className="font-semibold mb-2">About</h3>
+                <p>{profileData.profile.bio}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ProfilePage = () => {
   const { id } = useParams();
@@ -19,7 +105,7 @@ const ProfilePage = () => {
   useEffect(() => {
     fetchProfileData();
     fetchUserProducts();
-  }, []);
+  }, [id]);
 
   const fetchProfileData = async () => {
     if (isOwnProfile) {
@@ -37,9 +123,7 @@ const ProfilePage = () => {
   const fetchUserProducts = async () => {
     try {
       const response = await axios.get(
-        isOwnProfile 
-          ? routes.product.sellerProducts 
-          : routes.product.getSellerProductsById(id)
+        routes.product.getSellerProductsById(id)
       );
       setProducts(response.data.data);
       setLoading(false);
@@ -54,49 +138,14 @@ const ProfilePage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Profile Section */}
-      <div className="bg-base-200 rounded-xl p-6 mb-8">
-        <div className="flex flex-col md:flex-row items-center gap-6">
-          {/* Profile Image */}
-          <div className="w-32 h-32 rounded-full overflow-hidden">
-            <img
-              src="https://static-00.iconduck.com/assets.00/user-avatar-happy-icon-2048x2048-ssmbv1ou.png"
-              alt="Profile"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          
-          {/* User Info */}
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-2">{profileData?.profile?.fullName}</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm opacity-70">Username</p>
-                <p className="font-semibold">{profileData?.username}</p>
-              </div>
-              {isOwnProfile && (
-                <>
-                  <div>
-                    <p className="text-sm opacity-70">Email</p>
-                    <p className="font-semibold">{profileData?.email}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm opacity-70">Phone</p>
-                    <p className="font-semibold">{profileData?.profile?.phone || 'Not provided'}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm opacity-70">Address</p>
-                    <p className="font-semibold">{profileData?.profile?.address || 'Not provided'}</p>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <ProfileSection 
+        profileData={profileData} 
+        isOwnProfile={isOwnProfile} 
+        products={products} 
+      />
+      
       {/* Products Section */}
-      <div>
+      <div className="mt-8">
         <h2 className="text-2xl font-bold mb-4">
           {isOwnProfile ? 'My Products' : `${profileData?.username}'s Products`}
         </h2>
