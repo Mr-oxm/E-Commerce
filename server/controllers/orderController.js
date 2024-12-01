@@ -1,10 +1,11 @@
 // controllers/orderController.js
 const Order = require('../models/Order');
 const Product = require('../models/Product');
+const Payment = require('../models/Payment');
 
 exports.createOrder = async (req, res) => {
   try {
-    const { products, shippingAddress, phoneNumber, paymentMethod } = req.body;
+    const { products, shippingAddress, phoneNumber, paymentMethod, paymentId } = req.body;
     
     if (!products || !Array.isArray(products) || products.length === 0) {
       return res.status(400).json({ 
@@ -70,17 +71,42 @@ exports.createOrder = async (req, res) => {
       await product.save();
     }
 
+    let payment;
+    if (paymentMethod === 'credit') {
+      // For credit card payments, payment should already exist
+      payment = await Payment.findOne({paypalPaymentId: paymentId});
+      if (!payment) {
+        return res.status(400).json({ 
+          success: false, 
+          error: 'Invalid payment' 
+        });
+      }
+      
+      // Update payment status to completed if it's not already
+      if (payment.status !== 'completed') {
+        payment.status = 'completed';
+        await payment.save();
+      }
+    } else {
+      // For cash payments, create new payment
+      payment = await Payment.create({
+        amount: totalAmount,
+        method: 'cash',
+        status: 'pending'
+      });
+    }
+
     const order = await Order.create({
       buyer: req.user.id,
       products: orderProducts,
       totalAmount,
       shippingAddress,
       phoneNumber,
-      paymentMethod,
+      payment: payment._id,
       status: 'pending'
     });
 
-    // Populate the products and seller information for the response
+    // Populate the order
     await order.populate([
       {
         path: 'products.product',
@@ -89,6 +115,9 @@ exports.createOrder = async (req, res) => {
       {
         path: 'products.seller',
         select: 'username email'
+      },
+      {
+        path: 'payment'
       }
     ]);
 
@@ -97,7 +126,7 @@ exports.createOrder = async (req, res) => {
       data: order 
     });
   } catch (error) {
-    console.error('Create order error:', error); // For debugging
+    console.error('Create order error:', error);
     res.status(500).json({ 
       success: false, 
       error: error.message || 'Error creating order' 
@@ -107,7 +136,7 @@ exports.createOrder = async (req, res) => {
 
 exports.getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id).populate('products.product').populate('buyer', 'username email');
+    const order = await Order.findById(req.params.id).populate('products.product').populate('buyer', 'username email').populate('payment');
     if (!order) {
       return res.status(404).json({ success: false, error: 'Order not found' });
     }
@@ -160,7 +189,7 @@ exports.cancelOrder = async (req, res) => {
 
 exports.getOrderHistory = async (req, res) => {
   try {
-    const orders = await Order.find({ buyer: req.user.id }).populate('products.product');
+    const orders = await Order.find({ buyer: req.user.id }).populate('products.product').populate('payment');
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -170,7 +199,7 @@ exports.getOrderHistory = async (req, res) => {
 exports.updateOrderStatus = async (req, res) => {
   try {
     const { productId, status } = req.body;
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate('payment');
     
     if (!order) {
       return res.status(404).json({ success: false, error: 'Order not found' });
@@ -242,7 +271,7 @@ exports.getShippingDetails = async (req, res) => {
 exports.viewSales = async (req, res) => {
   try {
     const orders = await Order.find({ 'products.seller': req.user.id })
-      .populate('products.product').populate('buyer', 'profile.fullName');
+      .populate('products.product').populate('buyer', 'profile.fullName').populate('payment');
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -255,7 +284,7 @@ exports.viewOrdersForProduct = async (req, res) => {
     if (!product || product.seller.toString() !== req.user.id) {
       return res.status(404).json({ success: false, error: 'Product not found' });
     }
-    const orders = await Order.find({ 'products.product': req.params.productId }).populate('buyer', 'username email');
+    const orders = await Order.find({ 'products.product': req.params.productId }).populate('buyer', 'username email').populate('payment');
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });

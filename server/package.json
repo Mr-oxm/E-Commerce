@@ -19,6 +19,7 @@
     "express-validator": "^7.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.7.0",
+    "paypal-rest-sdk": "^1.8.1",
     "uploadthing": "^7.3.0"
   },
   "devDependencies": {

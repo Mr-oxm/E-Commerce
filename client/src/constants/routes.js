@@ -49,7 +49,14 @@ const routes = {
   },
   upload: {
     uploadImage: `${API_BASE_URL}/uploadthing`,
-  }
+  },
+  payment: {
+    createPayPalPayment: `${API_BASE_URL}/payment/create-paypal-payment`,
+    executePayPalPayment: (paymentId, PayerID) => 
+      `${API_BASE_URL}/payment/execute-paypal-payment?paymentId=${paymentId}&PayerID=${PayerID}`,
+    getPayment: (paymentId) => `${API_BASE_URL}/payment/${paymentId}`,
+    getPaymentByPayPalId: (paypalPaymentId) => `${API_BASE_URL}/payment/paypal/${paypalPaymentId}`,
+  },
 };
 
 export default routes;

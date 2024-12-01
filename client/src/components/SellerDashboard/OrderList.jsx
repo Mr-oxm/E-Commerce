@@ -134,10 +134,10 @@ const OrderList = ({ orders, loading, onStatusUpdate }) => {
                         </span>
                       </div>
                     )}
-                    {order.paymentMethod && (
+                    {order.payment.method && (
                       <div className="flex items-center gap-2">
                         <span className="badge badge-ghost">
-                          <FaCreditCard className="mr-2" /> {order.paymentMethod.toUpperCase()}
+                          <FaCreditCard className="mr-2" /> {order.payment.method.toUpperCase()}
                         </span>
                       </div>
                     )}

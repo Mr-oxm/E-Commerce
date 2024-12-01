@@ -10,9 +10,21 @@ export const ShoppingCartProvider = ({ children }) => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
+  const [selectedAddressIndex, setSelectedAddressIndex] = useState(() => {
+    const saved = localStorage.getItem('selectedAddressIndex');
+    return saved ? JSON.parse(saved) : '';
+  });
+
+  const [selectedPhoneIndex, setSelectedPhoneIndex] = useState(() => {
+    const saved = localStorage.getItem('selectedPhoneIndex');
+    return saved ? JSON.parse(saved) : '';
+  });
+
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
-  }, [cartItems]);
+    localStorage.setItem('selectedAddressIndex', JSON.stringify(selectedAddressIndex));
+    localStorage.setItem('selectedPhoneIndex', JSON.stringify(selectedPhoneIndex));
+  }, [cartItems, selectedAddressIndex, selectedPhoneIndex]);
 
   const addToCart = (product, quantity = 1) => {
     setCartItems(prevItems => {
@@ -40,6 +52,8 @@ export const ShoppingCartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
+    setSelectedAddressIndex('');
+    setSelectedPhoneIndex('');
   };
 
   const getCartTotal = () => {
@@ -59,6 +73,10 @@ export const ShoppingCartProvider = ({ children }) => {
       clearCart,
       getCartTotal,
       getCartItemsCount,
+      selectedAddressIndex,
+      setSelectedAddressIndex,
+      selectedPhoneIndex,
+      setSelectedPhoneIndex,
     }}>
       {children}
     </ShoppingCartContext.Provider>

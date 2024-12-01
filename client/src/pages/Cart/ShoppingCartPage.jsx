@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useShoppingCart } from '../../context/ShoppingCartContext';
 import { FaTrash, FaCreditCard } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -14,17 +14,51 @@ import PaymentMethod from '../../components/Cart/PaymentMethod';
 const ShoppingCartPage = () => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal } = useShoppingCart();
+  const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal, selectedAddressIndex, selectedPhoneIndex } = useShoppingCart();
   const [addressError, setAddressError] = useState('');
   const [selectedAddress, setSelectedAddress] = useState('');
   const [selectedPhone, setSelectedPhone] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleCheckout = async () => {
+  useEffect(() => {
+    if (user?.profile?.addresses && selectedAddressIndex !== '') {
+      setSelectedAddress(user.profile.addresses[selectedAddressIndex]?.value || '');
+    }
+    if (user?.profile?.phoneNumbers && selectedPhoneIndex !== '') {
+      setSelectedPhone(user.profile.phoneNumbers[selectedPhoneIndex]?.value || '');
+    }
+  }, [user, selectedAddressIndex, selectedPhoneIndex]);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentId = urlParams.get('paymentId');
+    const token = urlParams.get('token');
+    const PayerID = urlParams.get('PayerID');
+
+    if (paymentId && token && PayerID && selectedAddress && selectedPhone) {
+      axios.get(routes.payment.executePayPalPayment(paymentId, PayerID))
+        .then(response => {
+          console.log("response", response);
+          if (response.data.success) {
+            console.log("paymentId", paymentId);
+            handleCheckout(paymentId, true);
+          }
+        })
+        .catch(error => {
+          console.log("error", error);
+          setErrorMessage(error.response?.data?.error || 'Payment execution failed');
+        });
+    }
+  }, [selectedAddress, selectedPhone]);
+
+  const handleCheckout = async (paymentId = null, paypalPayment = false) => {
     try {
       setAddressError('');
       setPhoneError('');
+      setIsProcessingPayment(true);
       
       if (!selectedAddress) {
         setAddressError('Please select a shipping address');
@@ -46,20 +80,33 @@ const ShoppingCartPage = () => {
         })),
         shippingAddress: selectedAddress,
         phoneNumber: selectedPhone,
-        paymentMethod
+        paymentMethod: paypalPayment ? 'credit' : paymentMethod,
       };
+      if(paymentId && paypalPayment) {
+        orderData.paymentId = paymentId;
+      }
 
-      const response = await axios.post(routes.order.createOrder, orderData);
-      
-      if (response.data.success) {
-        clearCart();
-        navigate('/thank-you', { state: { order: response.data.data } });
+      if (paymentMethod === 'credit' && !paypalPayment) {
+        const response = await axios.post(routes.payment.createPayPalPayment, orderData);
+        if (response.data.success) {
+          // Redirect to PayPal
+          window.location.href = response.data.approvalUrl;
+        }
+      } else {
+        const response = await axios.post(routes.order.createOrder, orderData);
+        if (response.data.success) {
+          clearCart();
+          navigate('/thank-you', { state: { order: response.data.data } });
+        }
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.error || 'Error creating order. Please try again.';
+      const errorMessage = error.response?.data?.error || 'Error processing payment. Please try again.';
       document.querySelector('.error-message').textContent = errorMessage;
+    } finally {
+      setIsProcessingPayment(false);
     }
   };
+
 
   if (cartItems.length === 0) {
     return <EmptyCart />;
@@ -68,6 +115,13 @@ const ShoppingCartPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
+      
+      {errorMessage && (
+        <div className="alert alert-error mb-4">
+          <span>{errorMessage}</span>
+        </div>
+      )}
+
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -121,9 +175,16 @@ const ShoppingCartPage = () => {
         <button 
           className="btn btn-primary"
           onClick={handleCheckout}
-          disabled={cartItems.length === 0}
+          disabled={cartItems.length === 0 || isProcessingPayment}
         >
-          <FaCreditCard className="mr-2" /> Proceed to Checkout
+          {isProcessingPayment ? (
+            <span className="loading loading-spinner"></span>
+          ) : (
+            <>
+              <FaCreditCard className="mr-2" /> 
+              {paymentMethod === 'credit' ? 'Pay with Credit Card' : 'Proceed to Checkout'}
+            </>
+          )}
         </button>
       </div>
     </div>

@@ -235,12 +235,12 @@ const OrderDetails = () => {
                   </div>
                 </div>
               )}
-              {order.paymentMethod && (
+              {order.payment.method && (
                 <div className="flex items-center gap-3">
                   <FaCreditCard className="text-xl text-primary" />
                   <div>
                     <h3 className="font-semibold">Payment Method</h3>
-                    <p className="text-base-content/70">{order.paymentMethod.toUpperCase()}</p>
+                    <p className="text-base-content/70">{order.payment.method.toUpperCase()}</p>
                   </div>
                 </div>
               )}

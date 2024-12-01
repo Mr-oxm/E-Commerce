@@ -112,6 +112,14 @@ const Reviews = ({ product, onReviewUpdate }) => {
           {product.ratings.map((review) => (
             <div key={review._id} className="card bg-base-100 ">
               <div className="card-body">
+                <div className="flex items-center gap-3 mb-2">
+                  <img 
+                    src={review.user.profile.profilePhoto} 
+                    alt={review.user.profile.fullName}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                  <span className="font-medium">{review.user.profile.fullName}</span>
+                </div>
                 <div className="flex justify-between items-center">
                   <div className="flex gap-1">
                     {[...Array(5)].map((_, index) => (
@@ -123,7 +131,7 @@ const Reviews = ({ product, onReviewUpdate }) => {
                       />
                     ))}
                   </div>
-                  {user && review.user === user._id && (
+                  {user && review.user._id === user._id && (
                     <div className="flex gap-2">
                       <button
                         onClick={() => handleEdit(review)}

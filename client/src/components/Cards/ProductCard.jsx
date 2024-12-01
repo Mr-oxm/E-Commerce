@@ -8,6 +8,9 @@ const ProductCard = ({ product }) => {
   const averageRating = product.ratings.length > 0
     ? (product.ratings.reduce((sum, rating) => sum + rating.rating, 0) / product.ratings.length).toFixed(1)
     : 'No ratings';
+
+  const isDisabled = product.hasVariations || product.stock === 0;
+  
   return (
     <div className="card w-full bg-base-100 border border-transparent hover:border-primary transition-all duration-300">
         <Link to={`/product/${product._id}`}>
@@ -29,13 +32,19 @@ const ProductCard = ({ product }) => {
                 </span>
             </div>
             <div className="flex gap-4 justify-between items-center">
-                <span className="text-xl font-bold flex-1 truncate">${product.price.toFixed(2)}</span>
+                <span className="text-xl font-bold flex-1 truncate">
+                  {product.hasVariations ? `From $${product.basePrice.toFixed(2)}` : `$${product.price.toFixed(2)}`}
+                </span>
                 <button 
-                  className={`btn ${isInCart ? 'btn-accent' : 'btn-primary'}`} 
-                  onClick={() => addToCart(product)}
-                  disabled={isInCart}
+                  className={`btn ${isInCart ? 'btn-accent' : isDisabled ? 'btn-disabled' : 'btn-primary'}`} 
+                  onClick={() => !isDisabled && addToCart(product)}
+                  disabled={isInCart || isDisabled}
+                  title={product.hasVariations ? 'Select options on product page' : product.stock === 0 ? 'Out of stock' : ''}
                 >
-                  {isInCart ? <FaCheck /> : <FaShoppingCart />}
+                  {isInCart ? <FaCheck /> : 
+                   product.stock === 0 ? 'Out of Stock' :
+                   product.hasVariations ? 'Options' :
+                   <FaShoppingCart />}
                 </button>
             </div>
         </div>

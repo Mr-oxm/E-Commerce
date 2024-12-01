@@ -99,7 +99,7 @@ const OrderHistory = () => {
                   <div className="flex flex-col gap-1 text-sm">
                     <div>
                       <span className="opacity-70">Payment Method: </span>
-                      <span className="capitalize">{order.paymentMethod}</span>
+                      <span className="capitalize">{order.payment.method}</span>
                     </div>
                     <div>
                       <span className="opacity-70">Phone: </span>

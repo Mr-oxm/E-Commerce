@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 const { createRouteHandler } = require("uploadthing/express");
 const uploadRouter = require('./utils/uploadthing');
 
@@ -23,10 +24,12 @@ app.use(
       config: { token: process.env.UPLOADTHING_TOKEN },
     }),
   );
+
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/payment', paymentRoutes);
 
 app.use(errorHandler);
 

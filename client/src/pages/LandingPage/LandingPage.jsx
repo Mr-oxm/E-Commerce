@@ -6,6 +6,7 @@ import routes from '../../constants/routes';
 import { categories } from '../../constants/categories';
 import LoadingAnimation from '../../components/Shared/LoadingAnimation';
 import CategoryIcons from '../../components/Landing/CategoryIcons';
+import HeroBanner from '../../components/Landing/HeroBanner';
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);
@@ -36,6 +37,7 @@ const LandingPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <HeroBanner />
       <CategoryIcons />
       <h1 className="text-3xl font-bold mb-8">Our Products</h1>
       {categories.map((category) => {

@@ -64,7 +64,13 @@ const ProductDetails = () => {
     );
   };
 
+  const isOutOfStock = product?.hasVariations 
+    ? currentStock === 0 
+    : product?.stock === 0;
+
   const handleAddToCart = () => {
+    if (isOutOfStock) return;
+    
     if (product.hasVariations) {
       addToCart({
         ...product,
@@ -191,19 +197,31 @@ const ProductDetails = () => {
           )}
           <p className="mb-4">
             In Stock: 
-            <span className='font-bold mx-2'>
+            <span className={`font-bold mx-2 ${isOutOfStock ? 'text-red-500' : ''}`}>
               {product.hasVariations ? currentStock : product.stock}
             </span>
           </p>
           <button 
-            className={`btn ${isInCart ? 'btn-accent' : 'btn-primary'}`}
+            className={`btn ${
+              isInCart ? 'btn-accent' : 
+              isOutOfStock ? 'btn-disabled' :
+              'btn-primary'
+            }`}
             onClick={handleAddToCart}
-            disabled={isInCart || !areAllVariationsSelected()}
+            disabled={isInCart || !areAllVariationsSelected() || isOutOfStock}
+            title={
+              isOutOfStock ? 'Out of stock' :
+              !areAllVariationsSelected() ? 'Please select all options' :
+              isInCart ? 'Already in cart' : 
+              'Add to cart'
+            }
           >
             {isInCart ? (
               <>
                 <FaCheck className="mr-2" /> In Cart
               </>
+            ) : isOutOfStock ? (
+              'Out of Stock'
             ) : (
               <>
                 <FaShoppingCart className="mr-2" /> 
@@ -215,9 +233,9 @@ const ProductDetails = () => {
             )}
           </button>
         </div>
-        <div className='space-y-4 col'>
+        <div className='space-y-4 col-span-2'>
           <h2 className="text-2xl font-bold my-4">Description</h2>
-          <p className="text-gray-600 mb-4">{product.description}</p>
+          <p className="text-content mb-4">{product.description}</p>
         </div>
       </div>
       <Reviews 

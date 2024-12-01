@@ -37,10 +37,10 @@ const orderSchema = new mongoose.Schema({
   returnReason: { type: String },
   returnRequestDate: { type: Date },
   createdAt: { type: Date, default: Date.now },
-  paymentMethod: {
-    type: String,
-    enum: ['cash', 'credit'],
-    required: true
+  payment: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Payment', 
+    required: true 
   },
   phoneNumber: { 
     type: String, 
