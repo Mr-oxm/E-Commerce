@@ -8,7 +8,7 @@ import Layout from './Layout';
 import SellerDashboard from './pages/SellerDashboard/SellerDashboard';
 import LandingPage from './pages/LandingPage/LandingPage';
 import ProductDetails from './pages/ProductDetails/ProductDetails';
-import { ThemeContextProvider } from './context/themeContext';
+import { ThemeContextProvider } from './context/ThemeContext';
 import { ShoppingCartProvider } from './context/ShoppingCartContext';
 import ShoppingCartPage from './pages/Cart/ShoppingCartPage';
 import SearchPage from './pages/SearchPage/SearchPage';
