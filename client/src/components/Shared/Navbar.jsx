@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
-import { useThemeContext } from '../../context/themeContext';
+import { useThemeContext } from '../../context/ThemeContext';
 import { themes } from '../../constants/themes';
 import Modal from './Model';
 import { useShoppingCart } from '../../context/ShoppingCartContext';

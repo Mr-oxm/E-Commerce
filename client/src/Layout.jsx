@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import Footer from './components/Shared/Footer';
 import Navbar from './components/Shared/Navbar';
-import { useThemeContext } from './context/themeContext';
+import { useThemeContext } from './context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
 
