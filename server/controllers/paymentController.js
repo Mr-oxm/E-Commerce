@@ -4,7 +4,7 @@ const paypal = require('../config/paypal');
 
 exports.createPayPalPayment = async (req, res) => {
   try {
-    const { products, shippingAddress, phoneNumber } = req.body;
+    const { products} = req.body;
     
     // Calculate total amount
     let totalAmount = products.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -106,30 +106,3 @@ exports.executePayPalPayment = async (req, res) => {
   }
 };
 
-exports.getPayment = async (req, res) => {
-  try {
-    const payment = await Payment.findById(req.params.id);
-    
-    if (!payment) {
-      return res.status(404).json({ success: false, error: 'Payment not found' });
-    }
-
-    res.json({ success: true, payment });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
-};
-
-exports.getPaymentByPayPalId = async (req, res) => {
-  try {
-    const payment = await Payment.findOne({ paypalPaymentId: req.params.paypalPaymentId });
-    
-    if (!payment) {
-      return res.status(404).json({ success: false, error: 'Payment not found' });
-    }
-
-    res.json({ success: true, payment });
-  } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
-  }
-};

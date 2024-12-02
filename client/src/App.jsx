@@ -17,6 +17,8 @@ import OrderDetails from './components/Order/OrderDetails';
 import OrderHistory from './pages/Order/OrderHistory';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
+import ChangePasswordPage from './pages/ChangePassword/ChangePasswordPage';
+import ProtectedRoute from './components/Shared/ProtectedRoute';
 
 function App() {
   return (
@@ -34,15 +36,16 @@ function App() {
               <Route
                 path="/dashboard/*"
                 element={
-                  <Layout children={<SellerDashboard/>}/>
+                  <ProtectedRoute children={<Layout children={<SellerDashboard/>}/>} />
                 }
               />
               <Route path="/cart" element={<Layout children={<ShoppingCartPage />} />} />
               <Route path="/search" element={<Layout children={<SearchPage />} />} />
-              <Route path="/thank-you" element={<Layout children={<ThankYouPage />} />} />
-              <Route path="/order/:id" element={<Layout children={<OrderDetails />} />} />
-              <Route path="/order-history" element={<Layout children={<OrderHistory />} />} />
-              <Route path="/settings" element={<Layout children={<SettingsPage />} />} />
+              <Route path="/thank-you" element={<ProtectedRoute children={<Layout children={<ThankYouPage />} />} />} />
+              <Route path="/order/:id" element={<ProtectedRoute children={<Layout children={<OrderDetails />} />} />} />
+              <Route path="/order-history" element={<ProtectedRoute children={<Layout children={<OrderHistory />} />} />} />
+              <Route path="/settings" element={<ProtectedRoute children={<Layout children={<SettingsPage />} />} />} />
+              <Route path="/change-password" element={<ProtectedRoute children={<Layout children={<ChangePasswordPage />} />} />} />
             </Routes>
           </Router>
         </ShoppingCartProvider>

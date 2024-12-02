@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { AiOutlineLoading } from "react-icons/ai";
 import CategoryProductsSlider from '../../components/Shared/CategoryProductsSlider';
@@ -12,6 +12,8 @@ const LandingPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const productsRef = useRef(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,6 +30,12 @@ const LandingPage = () => {
     fetchProducts();
   }, []);
 
+  const scrollToProducts = () => {
+    if (productsRef.current) {
+      productsRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   if (loading) return <LoadingAnimation />;
   if (error) return <div className="text-center text-red-500">{error}</div>;
 
@@ -37,9 +45,9 @@ const LandingPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <HeroBanner />
+      <HeroBanner onShopNowClick={scrollToProducts} />
       <CategoryIcons />
-      <h1 className="text-3xl font-bold mb-8">Our Products</h1>
+      <h1 ref={productsRef} className="text-3xl font-bold mb-8">Our Products</h1>
       {categories.map((category) => {
         const categoryProducts = getProductsByCategory(category);
         if (categoryProducts.length > 0) {

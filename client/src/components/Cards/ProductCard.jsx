@@ -12,7 +12,7 @@ const ProductCard = ({ product }) => {
   const isDisabled = product.hasVariations || product.stock === 0;
   
   return (
-    <div className="card w-full bg-base-100 border border-transparent hover:border-primary transition-all duration-300">
+    <div className="card w-full bg-base-100 border border-transparent hover:border-primary transition-all duration-300" >
         <Link to={`/product/${product._id}`}>
             <figure>
                 <img src={product.images[0]} alt={product.name} className="h-48 w-full object-contain" />

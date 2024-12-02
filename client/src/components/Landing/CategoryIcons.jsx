@@ -29,7 +29,7 @@ const CategoryIcons = () => {
   ];
 
   return (
-    <div className="py-8 bg-base-200">
+    <div className="py-8">
       <div className="container mx-auto px-4 overflow-x-auto scrollbar-hide scroll-smooth">
         <div className="flex gap-8 min-w-max justify-between">
           {categoryIcons.map(({ name, icon: Icon }) => (

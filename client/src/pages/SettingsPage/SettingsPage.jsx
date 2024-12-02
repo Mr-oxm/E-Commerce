@@ -4,6 +4,7 @@ import { FiUser, FiPhone, FiMapPin, FiEdit, FiPlus, FiTrash2 } from 'react-icons
 import axios from 'axios';
 import routes from '../../constants/routes';
 import { UploadButton } from '../../utils/upload';
+import { Link } from 'react-router-dom';
 
 const SettingsPage = () => {
     const { user, updateUserProfile } = useContext(AuthContext);
@@ -129,6 +130,10 @@ const SettingsPage = () => {
               className="h-24"
             />
           </div>
+          
+          <Link to="/change-password" className="btn btn-warning">
+            Change Password
+          </Link>
   
           {/* Addresses */}
           <div className="form-control">
@@ -207,6 +212,7 @@ const SettingsPage = () => {
               <FiPlus className="mr-2" /> Add Phone Number
             </button>
           </div>
+  
   
           <button type="submit" className="btn btn-primary w-full" disabled={loading}>
             {loading ? <span className="loading loading-spinner"></span> : 'Save Changes'}

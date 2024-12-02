@@ -59,7 +59,7 @@ const ShoppingCartPage = () => {
       setAddressError('');
       setPhoneError('');
       setIsProcessingPayment(true);
-      
+
       if (!selectedAddress) {
         setAddressError('Please select a shipping address');
         return;
@@ -85,7 +85,7 @@ const ShoppingCartPage = () => {
       if(paymentId && paypalPayment) {
         orderData.paymentId = paymentId;
       }
-
+      console.log("Order Data", orderData);
       if (paymentMethod === 'credit' && !paypalPayment) {
         const response = await axios.post(routes.payment.createPayPalPayment, orderData);
         if (response.data.success) {
@@ -146,7 +146,7 @@ const ShoppingCartPage = () => {
         </table>
       </div>
       
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+      {user && <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         <ShippingForm
           user={user}
           selectedAddress={selectedAddress}
@@ -160,7 +160,7 @@ const ShoppingCartPage = () => {
           paymentMethod={paymentMethod}
           setPaymentMethod={setPaymentMethod}
         />
-      </div>
+      </div>}
 
       <div className="mt-8 flex justify-between items-center">
         <button onClick={clearCart} className="btn btn-error">
@@ -171,7 +171,7 @@ const ShoppingCartPage = () => {
         </div>
       </div>
       
-      <div className="mt-4 flex justify-end">
+      {user && <div className="mt-4 flex justify-end">
         <button 
           className="btn btn-primary"
           onClick={handleCheckout}
@@ -186,7 +186,8 @@ const ShoppingCartPage = () => {
             </>
           )}
         </button>
-      </div>
+      </div>}
+      {!user && <p className='text-center text-lg'>Please login to checkout</p>}
     </div>
   );
 };

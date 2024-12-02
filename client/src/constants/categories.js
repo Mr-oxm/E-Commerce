@@ -2,12 +2,12 @@
 export const categories = [
     'Electronics',
     'Clothing',
-    'Home & Garden',
+    'Home',
     'Books',
-    'Toys & Games',
-    'Sports & Outdoors',
-    'Beauty & Personal Care',
+    'Toys',
+    'Sports',
+    'Beauty',
     'Automotive',
-    'Food & Grocery',
-    'Health & Wellness'
+    'Food',
+    'Health'
   ];

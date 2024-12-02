@@ -5,12 +5,13 @@ const {
     updateReview,
     deleteReview
 } = require('../controllers/reviewController');
+const { validate, schemas } = require('../utils/inputValidators');
 
 const router = express.Router();
 
 router.use(protect);
 
-router.post('/', createReview);
+router.post('/', validate(schemas.reviewCreate), createReview);
 router.put('/:id', updateReview);
 router.delete('/:id', deleteReview);
 

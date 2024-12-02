@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
   const fetchUser = useCallback(async () => {
     try {
@@ -34,8 +35,10 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const res = await axios.post(routes.auth.login, { email, password });
-      localStorage.setItem('token', res.data.token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+      const newToken = res.data.token;
+      localStorage.setItem('token', newToken);
+      setToken(newToken);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
       await fetchUser();
       setNeedsOnboarding(res.data.needsOnboarding || false);
       return res.data.needsOnboarding;
@@ -61,6 +64,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    setToken(null);
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
   };
@@ -78,7 +82,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, needsOnboarding, login, signup, logout, updateUserProfile }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      loading, 
+      needsOnboarding, 
+      token, 
+      login, 
+      signup, 
+      logout, 
+      updateUserProfile 
+    }}>
       {children}
     </AuthContext.Provider>
   );

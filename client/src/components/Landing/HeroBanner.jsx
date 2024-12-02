@@ -1,9 +1,8 @@
-import { BsArrowRight } from 'react-icons/bs';
 import { FaShoppingBag } from 'react-icons/fa';
 
-const HeroBanner = () => {
+const HeroBanner = ({ onShopNowClick }) => {
   return (
-    <div className="hero min-h-[500px] bg-base-200 rounded-xl mb-8">
+    <div className="hero  h-[calc(100vh-66px-8px)] bg-base-200 rounded-xl mb-8">
       <div className="hero-content flex-col lg:flex-row-reverse items-center">
         <div className="lg:w-1/2 items-center">
           <img 
@@ -19,11 +18,8 @@ const HeroBanner = () => {
             Quality meets affordability in our carefully curated selection.
           </p>
           <div className="flex gap-4">
-            <button className="btn btn-primary">
+            <button className="btn btn-primary" onClick={onShopNowClick}>
               Shop Now <FaShoppingBag className="ml-2" />
-            </button>
-            <button className="btn btn-outline">
-              Explore More <BsArrowRight className="ml-2" />
             </button>
           </div>
         </div>

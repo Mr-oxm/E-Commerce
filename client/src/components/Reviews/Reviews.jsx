@@ -114,7 +114,7 @@ const Reviews = ({ product, onReviewUpdate }) => {
               <div className="card-body">
                 <div className="flex items-center gap-3 mb-2">
                   <img 
-                    src={review.user.profile.profilePhoto} 
+                    src={review.user.profile.profilePhoto || "https://static-00.iconduck.com/assets.00/user-avatar-happy-icon-2048x2048-ssmbv1ou.png"} 
                     alt={review.user.profile.fullName}
                     className="w-10 h-10 rounded-full object-cover"
                   />

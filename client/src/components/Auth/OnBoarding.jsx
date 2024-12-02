@@ -1,13 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { UploadButton } from '../../utils/upload';
 
 const OnBoarding = () => {
   const { user, updateUserProfile, needsOnboarding } = useContext(AuthContext);
   const [fullName, setFullName] = useState(user?.profile?.fullName || '');
-  const [address, setAddress] = useState(user?.profile?.address || '');
-  const [phoneNumber, setPhoneNumber] = useState(user?.profile?.phoneNumber || '');
   const [bio, setBio] = useState(user?.profile?.bio || '');
+  const [profilePhoto, setProfilePhoto] = useState(user?.profile?.profilePhoto || '');
   const [error, setError] = useState('');
   const navigate = useNavigate();
   
@@ -20,9 +20,8 @@ const OnBoarding = () => {
     try {
       const needsOnboarding = await updateUserProfile({
         'profile.fullName': fullName,
-        'profile.address': address,
-        'profile.phoneNumber': phoneNumber,
-        'profile.bio': bio
+        'profile.bio': bio,
+        'profile.profilePhoto': profilePhoto
       });
       if (!needsOnboarding) {
         navigate('/')
@@ -42,9 +41,32 @@ const OnBoarding = () => {
       <div className='flex flex-col gap-2 items-center p-4'>
         <h1 className='text-4xl font-bold text-center'>User Profile</h1>
       </div>
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text">Profile Photo</span>
+        </label>
+        <div className="flex flex-col md:flex-row gap-4 items-center space-x-4">
+          <div className="avatar">
+            <div className="w-24 rounded-full">
+              <img src={profilePhoto || 'https://static-00.iconduck.com/assets.00/user-avatar-happy-icon-2048x2048-ssmbv1ou.png'} alt="Profile" />
+            </div>
+          </div>
+          <UploadButton
+            endpoint="imageUploader"
+            onClientUploadComplete={(response) => {
+              if (response?.[0]?.url) {
+                setProfilePhoto(response[0].url);
+              }
+            }}
+            config={{mode: "manual"}} 
+            onUploadError={(error) => {
+              console.error('Upload error:', error);
+              setError('Failed to upload photo');
+            }}
+          />
+        </div>
+      </div>
       <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Full Name" required  />
-      <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Address"  />
-      <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} placeholder="Phone Number"  />
       <textarea value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Bio"/>
       <button type="submit" className='btn btn-primary'>Update Profile</button>
     </form>

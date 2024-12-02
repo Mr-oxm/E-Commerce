@@ -32,7 +32,7 @@ const CategoryProductsSlider = ({ category, products }) => {
   }, [scrollPosition]);
 
   return (
-    <div className="w-full mb-4">
+    <div className="w-full mb-4 ">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">{category}</h2>
         <Link to={`/search?category=${category}`}>
@@ -42,7 +42,7 @@ const CategoryProductsSlider = ({ category, products }) => {
       <div className="relative">
         <div 
           ref={sliderRef}
-          className="flex flex-row gap-4 w-full overflow-x-hidden scroll-smooth"
+          className="flex flex-row gap-4 w-full overflow-x-hidden scroll-smooth p-4"
         >
           {products.map((product) => (
             <div key={product._id} className="flex-shrink-0 w-80">
