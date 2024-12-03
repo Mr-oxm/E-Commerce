@@ -54,6 +54,7 @@ const Signup = () => {
       <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required  />
       <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required  />
       <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required  />
+      <p className='text-sm text-gray-500'>Minimum 8 characters long and contain numbers, letters and special characters</p>
       <button type="submit" className='btn btn-primary'>Sign Up</button>
     </form>
   );
