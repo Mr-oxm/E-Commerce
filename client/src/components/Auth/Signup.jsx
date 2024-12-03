@@ -33,7 +33,7 @@ const Signup = () => {
         navigate('/')
       }
     } catch (error) {
-      setError('Login failed. Please check your credentials and try again.');
+      setError('Signup failed. Write a valid email and password.');
     }
   };
 
