@@ -78,18 +78,12 @@ const AddEditProduct = ({ onProductSaved }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const dataToSubmit = { ...productData };
-
-    if (!dataToSubmit.hasVariations) {
-      delete dataToSubmit.basePrice;
-    }
-
     try {
       let response;
       if (id) {
-        response = await axios.put(routes.product.edit(id), dataToSubmit);
+        response = await axios.put(routes.product.edit(id), productData);
       } else {
-        response = await axios.post(routes.product.create, dataToSubmit);
+        response = await axios.post(routes.product.create, productData);
       }
       onProductSaved(response.data.data);
       if (!id) {

@@ -24,7 +24,7 @@ router.get('/:id', getProductById);
 
 // Protected routes
 router.use(protect);
-router.post('/create', validate(schemas.productCreate), listNewProduct);
+router.post('/create', listNewProduct);
 router.put('/edit/:id', editProductDetails);
 router.delete('/remove/:id', removeProduct);
 router.get('/seller/products', getSellerProducts);
