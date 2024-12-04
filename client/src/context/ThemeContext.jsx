@@ -12,7 +12,7 @@ export const useThemeContext = () => {
 // the context provider
 export const ThemeContextProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || "dark";
+    return localStorage.getItem('theme') || "winter";
   });
 
   // Update localStorage when theme changes
