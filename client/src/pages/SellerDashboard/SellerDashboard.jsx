@@ -49,7 +49,7 @@ const SellerDashboard = () => {
 
   return (
     <div className="flex">
-      <div className='min-h-full lg:py-4 lg:pl-4'>
+      <div className='min-h-full lg:py-4 lg:pl-4 min-h-screen'>
         <Drawer sidebarContent={<SellerNav/>} label={<FaBars/>} labelStyles={"hidden"}/>
       </div>
       <div className="flex flex-col flex-1 overflow-auto">

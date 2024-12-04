@@ -58,7 +58,6 @@ const OnBoarding = () => {
                 setProfilePhoto(response[0].url);
               }
             }}
-            config={{mode: "manual"}} 
             onUploadError={(error) => {
               console.error('Upload error:', error);
               setError('Failed to upload photo');

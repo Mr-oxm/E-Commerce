@@ -47,7 +47,7 @@ const LandingPage = () => {
     <div className="container mx-auto px-4 py-8">
       <HeroBanner onShopNowClick={scrollToProducts} />
       <CategoryIcons />
-      <h1 ref={productsRef} className="text-3xl font-bold mb-8">Our Products</h1>
+      <h1 ref={productsRef} className="text-3xl font-bold mb-8 pt-2">Our Products</h1>
       {categories.map((category) => {
         const categoryProducts = getProductsByCategory(category);
         if (categoryProducts.length > 0) {

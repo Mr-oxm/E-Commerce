@@ -8,18 +8,19 @@ import { useParams } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaStar, FaBox } from 'react-icons/fa';
 
 const ProfileSection = ({ profileData, isOwnProfile, products }) => {
-  // Calculate average rating across all products
-  const averageRating = products.length > 0
-    ? (products.reduce((sum, product) => {
-        const productRating = product.ratings.length > 0
-          ? product.ratings.reduce((rSum, r) => rSum + r.rating, 0) / product.ratings.length
-          : 0;
-        return sum + productRating;
-      }, 0) / products.length).toFixed(1)
-    : 'No ratings';
+  // Calculate total number of ratings and sum of all ratings
+  const { totalRatings, ratingSum } = products.reduce((acc, product) => {
+    const productRatings = product.ratings || [];
+    return {
+      totalRatings: acc.totalRatings + productRatings.length,
+      ratingSum: acc.ratingSum + productRatings.reduce((sum, r) => sum + r.rating, 0)
+    };
+  }, { totalRatings: 0, ratingSum: 0 });
 
-  // Calculate total number of ratings
-  const totalRatings = products.reduce((sum, product) => sum + product.ratings.length, 0);
+  // Calculate overall average rating
+  const averageRating = totalRatings > 0
+    ? (ratingSum / totalRatings).toFixed(1)
+    : 'No ratings';
 
   return (
     <div className="card bg-base-200">

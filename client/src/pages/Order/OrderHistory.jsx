@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { FaBox, FaClock, FaCalendarAlt, FaDollarSign, FaSort } from 'react-icons/fa';
-import routes from '../../constants/routes';
-import LoadingAnimation from '../../components/Shared/LoadingAnimation';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import {
+  FaBox,
+  FaClock,
+  FaCalendarAlt,
+  FaDollarSign,
+  FaSort,
+} from "react-icons/fa";
+import routes from "../../constants/routes";
+import LoadingAnimation from "../../components/Shared/LoadingAnimation";
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortDirection, setSortDirection] = useState('desc');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [sortDirection, setSortDirection] = useState("desc");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   useEffect(() => {
     fetchOrders();
@@ -20,32 +26,32 @@ const OrderHistory = () => {
       const response = await axios.get(routes.order.getOrderHistory);
       setOrders(response.data.data);
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.error("Error fetching orders:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const sortedAndFilteredOrders = orders
-    .filter(order => statusFilter === 'all' || order.status === statusFilter)
+    .filter((order) => statusFilter === "all" || order.status === statusFilter)
     .sort((a, b) => {
       const dateA = new Date(a.createdAt);
       const dateB = new Date(b.createdAt);
-      return sortDirection === 'desc' ? dateB - dateA : dateA - dateB;
+      return sortDirection === "desc" ? dateB - dateA : dateA - dateB;
     });
 
   const getStatusBadgeColor = (status) => {
     const colors = {
-      pending: 'badge-warning',
-      processing: 'badge-info',
-      shipped: 'badge-primary',
-      delivered: 'badge-success',
-      cancelled: 'badge-error',
-      return_requested: 'badge-warning',
-      return_approved: 'badge-info',
-      return_rejected: 'badge-error'
+      pending: "badge-warning",
+      processing: "badge-info",
+      shipped: "badge-primary",
+      delivered: "badge-success",
+      cancelled: "badge-error",
+      return_requested: "badge-warning",
+      return_approved: "badge-info",
+      return_rejected: "badge-error",
     };
-    return colors[status] || 'badge-ghost';
+    return colors[status] || "badge-ghost";
   };
 
   if (loading) return <LoadingAnimation />;
@@ -75,10 +81,12 @@ const OrderHistory = () => {
 
         <button
           className="btn btn-outline gap-2 btn-sm"
-          onClick={() => setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')}
+          onClick={() =>
+            setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"))
+          }
         >
           <FaSort />
-          {sortDirection === 'asc' ? 'Newest First' : 'Oldest First'}
+          {sortDirection === "asc" ? "Newest First" : "Oldest First"}
         </button>
       </div>
 
@@ -94,7 +102,9 @@ const OrderHistory = () => {
                   </div>
                   <div className="flex items-center gap-2 text-base-content/70">
                     <FaCalendarAlt />
-                    <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+                    <span>
+                      {new Date(order.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
                   <div className="flex flex-col gap-1 text-sm">
                     <div>
@@ -108,7 +118,11 @@ const OrderHistory = () => {
                   </div>
                 </div>
                 <div className="flex flex-col md:items-end gap-2">
-                  <div className={`badge ${getStatusBadgeColor(order.status)} badge-lg`}>
+                  <div
+                    className={`badge ${getStatusBadgeColor(
+                      order.status
+                    )} badge-lg`}
+                  >
                     {order.status}
                   </div>
                   <div className="flex items-center gap-2 font-bold text-lg">
@@ -122,13 +136,13 @@ const OrderHistory = () => {
               <div className="flex flex-wrap gap-4 items-center justify-between">
                 <div className="flex flex-wrap gap-2">
                   {order.products.map((product, index) => (
-                    <div key={index} className="badge badge-outline">
+                    <div key={index} className=" bg-base-200 p-2 rounded-box max-w-32 text-left truncate">
                       {product.quantity}x {product.product.name}
                     </div>
                   ))}
                 </div>
-                <Link 
-                  to={`/order/${order._id}`} 
+                <Link
+                  to={`/order/${order._id}`}
                   className="btn btn-primary btn-sm gap-2"
                 >
                   <FaBox />
@@ -150,4 +164,4 @@ const OrderHistory = () => {
   );
 };
 
-export default OrderHistory; 
+export default OrderHistory;

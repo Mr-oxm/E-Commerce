@@ -42,22 +42,22 @@ const CategoryProductsSlider = ({ category, products }) => {
       <div className="relative">
         <div 
           ref={sliderRef}
-          className="flex flex-row gap-4 w-full overflow-x-hidden scroll-smooth p-4"
+          className="carousel flex flex-row gap-4 w-full scroll-smooth p-4"
         >
           {products.map((product) => (
-            <div key={product._id} className="flex-shrink-0 w-80">
+            <div key={product._id} className="carousel-item flex-shrink-0 w-80">
               <ProductCard product={product} />
             </div>
           ))}
         </div>
         <button
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 ml-1 bg-base-300 p-2 rounded-full shadow-md"
+          className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 ml-1 bg-base-300 p-2 rounded-full shadow-md"
           onClick={handlePrev}
         >
           <FaChevronLeft />
         </button>
         <button
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 mr-1 bg-base-300 p-2 rounded-full shadow-md"
+          className="hidden sm:block absolute right-0 top-1/2 transform -translate-y-1/2 mr-1 bg-base-300 p-2 rounded-full shadow-md"
           onClick={handleNext}
         >
           <FaChevronRight />

@@ -14,7 +14,7 @@ const Layout = ({children}) => {
     }
 
     return (
-        <div className='flex flex-col h-screen min-h-screen selection:bg-primary selection:text-base-content' data-theme={useThemeContext().theme}>
+        <div className='flex flex-col h-screen min-h-screen w-screen overflow-hidden selection:bg-primary selection:text-base-content' data-theme={useThemeContext().theme}>
             <Navbar className="sticky top-0 z-50" />
             <div className='flex-1 flex flex-col  justify-between overflow-y-auto bg-base-200 h-[calc(100vh-66px-8px)]'>
                 {children}

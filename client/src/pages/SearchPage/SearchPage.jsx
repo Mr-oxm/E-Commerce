@@ -32,27 +32,18 @@ const SearchPage = () => {
       setLoading(true);
       const keyword = searchParams.get('keyword');
       
-      console.log('Selected Category:', selectedCategory);
-      console.log('Raw URL params:', searchParams.toString());
-      
       // Build the filter URL with all parameters
       let url;
       if (keyword) {
         url = `${routes.product.search}?keyword=${keyword}`;
       } else {
         url = `${routes.product.filter}?`;
-        if (selectedCategory) {
-          const encodedCategory = encodeURIComponent(selectedCategory.trim());
-          console.log('Encoded category:', encodedCategory);
-          url += `category=${encodedCategory}&`;
-        }
+        if (selectedCategory) url += `category=${selectedCategory}&`;
         if (priceRange.min) url += `minPrice=${priceRange.min}&`;
         if (priceRange.max) url += `maxPrice=${priceRange.max}&`;
         // Remove trailing & if exists
         url = url.replace(/&$/, '');
       }
-
-      console.log('Final URL:', url);
 
       const response = await axios.get(url);
       let filteredProducts = response.data.data;

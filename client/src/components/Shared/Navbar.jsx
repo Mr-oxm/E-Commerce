@@ -6,13 +6,14 @@ import { themes } from '../../constants/themes';
 import Modal from './Model';
 import { useShoppingCart } from '../../context/ShoppingCartContext';
 // Import icons
-import { FaShoppingCart, FaUser, FaSignInAlt, FaCog, FaPalette, FaSignOutAlt, FaChartBar, FaHistory } from 'react-icons/fa';
+import { FaShoppingCart, FaUser, FaSignInAlt, FaCog, FaPalette, FaSignOutAlt, FaChartBar, FaHistory, FaSearch } from 'react-icons/fa';
 
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
     const { getCartItemsCount, getCartTotal } = useShoppingCart();
     const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState('');
+    const [isSearchVisible, setIsSearchVisible] = useState(false);
 
     const handleSearch = (e) => {
         e.preventDefault();
@@ -21,8 +22,25 @@ const Navbar = () => {
         }
     };
 
+    const SearchBar = () => {
+        return (
+            <form onSubmit={handleSearch} className="w-full">
+                <label className="input group focus-within:outline-none focus-within:ring-0 focus-within:border-primary bg-base-200 flex items-center gap-2 w-full">
+                    <FaSearch className="h-4 w-4 opacity-60" />
+                    <input
+                        type="text"
+                        className="grow border-0"
+                        placeholder="Search"
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                    />
+                </label>
+            </form>
+        )
+    }
+
     return (
-        <div className="navbar bg-base-100 z-40">
+        <div className="navbar bg-base-100 z-40 flex-wrap md:flex-nowrap">
             {/* Navbar start (unchanged) */}
             <div className="navbar-start">
                 <Link to="/" className="btn btn-ghost text-xl">
@@ -32,31 +50,18 @@ const Navbar = () => {
 
             {/* Navbar center (unchanged) */}
             <div className="navbar-center min-w-96 hidden md:flex">
-                <form onSubmit={handleSearch} className="w-full">
-                    <label className="input group focus-within:outline-none focus-within:ring-0 focus-within:border-primary bg-base-200 flex items-center gap-2 w-full">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 16 16"
-                            fill="currentColor"
-                            className="h-4 w-4 opacity-70">
-                            <path
-                            fillRule="evenodd"
-                            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                            clipRule="evenodd" />
-                        </svg>
-                        <input
-                            type="text"
-                            className="grow border-0"
-                            placeholder="Search"
-                            value={searchInput}
-                            onChange={(e) => setSearchInput(e.target.value)}
-                        />
-                    </label>
-                </form>
+                <SearchBar />
             </div>
 
             {/* Navbar end */}
             <div className="navbar-end">
+                {/* Mobile Search Button - Updated */}
+                <button 
+                    className="btn btn-ghost btn-circle md:hidden"
+                    onClick={() => setIsSearchVisible(!isSearchVisible)}
+                >
+                    <FaSearch className="h-5 w-5" />
+                </button>
                 {/* Cart (with icon) */}
                 <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
@@ -92,6 +97,12 @@ const Navbar = () => {
                     </Link>
                 }
             </div>
+            {/* Mobile Search Bar - New */}
+            {isSearchVisible && (
+                <div className="w-full p-2 md:hidden">
+                    <SearchBar />
+                </div>
+            )}
         </div>
     )
 }
@@ -169,6 +180,7 @@ const UserIcon = ({user, logout}) => {
                 </li>
                 <li><button onClick={logout} className="flex items-center"><FaSignOutAlt className="mr-2" /> Logout</button></li>
             </ul>
+
         </div>
     )
 }

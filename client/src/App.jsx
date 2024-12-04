@@ -36,16 +36,37 @@ function App() {
               <Route
                 path="/dashboard/*"
                 element={
-                  <ProtectedRoute children={<Layout children={<SellerDashboard/>}/>} />
+                  <ProtectedRoute children={<Layout children={<SellerDashboard/>}/>}/>
                 }
               />
-              <Route path="/cart" element={<Layout children={<ShoppingCartPage />} />} />
-              <Route path="/search" element={<Layout children={<SearchPage />} />} />
-              <Route path="/thank-you" element={<ProtectedRoute children={<Layout children={<ThankYouPage />} />} />} />
-              <Route path="/order/:id" element={<ProtectedRoute children={<Layout children={<OrderDetails />} />} />} />
-              <Route path="/order-history" element={<ProtectedRoute children={<Layout children={<OrderHistory />} />} />} />
-              <Route path="/settings" element={<ProtectedRoute children={<Layout children={<SettingsPage />} />} />} />
-              <Route path="/change-password" element={<ProtectedRoute children={<Layout children={<ChangePasswordPage />} />} />} />
+              <Route 
+                path="/cart" 
+                element={<Layout children={<ShoppingCartPage />} />} 
+              />
+              <Route 
+                path="/search" 
+                element={<Layout children={<SearchPage />} />} 
+              />
+              <Route 
+                path="/thank-you" 
+                element={<ProtectedRoute children={<Layout children={<ThankYouPage />} />}/>} 
+              />
+              <Route 
+                path="/order/:id" 
+                element={<ProtectedRoute children={<Layout children={<OrderDetails />} />}/>} 
+              />
+              <Route 
+                path="/order-history" 
+                element={<ProtectedRoute children={<Layout children={<OrderHistory />} />}/>} 
+              />
+              <Route 
+                path="/settings" 
+                element={<ProtectedRoute children={<Layout children={<SettingsPage />} />}/>} 
+              />
+              <Route 
+                path="/change-password" 
+                element={<ProtectedRoute children={<Layout children={<ChangePasswordPage />} />}/>} 
+              />
             </Routes>
           </Router>
         </ShoppingCartProvider>

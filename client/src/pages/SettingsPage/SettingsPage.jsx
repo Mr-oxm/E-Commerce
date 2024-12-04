@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { FiUser, FiPhone, FiMapPin, FiEdit, FiPlus, FiTrash2 } from 'react-icons/fi';
 import axios from 'axios';
@@ -17,6 +17,7 @@ const SettingsPage = () => {
       'profile.phoneNumbers': [],
       'profile.profilePhoto': ''
     });
+    const topRef = useRef(null);
   
     useEffect(() => {
       if (user) {
@@ -59,6 +60,7 @@ const SettingsPage = () => {
       try {
         await updateUserProfile(formData);
         setMessage({ type: 'success', content: 'Profile updated successfully!' });
+        topRef.current?.scrollIntoView({ behavior: 'smooth' });
       } catch (error) {
         setMessage({ type: 'error', content: error.response?.data?.error || 'Update failed' });
       }
@@ -66,7 +68,8 @@ const SettingsPage = () => {
     };
   
     return (
-      <div className="container p-6 ">
+      <div className="container p-6 m-auto">
+        <div ref={topRef}></div>
         <h1 className="text-3xl font-bold mb-8">Settings</h1>
         
         {message.content && (
@@ -98,7 +101,6 @@ const SettingsPage = () => {
                     setMessage({ type: 'success', content: 'Photo uploaded successfully!' });
                   }
                 }}
-                config={{mode: "manual"}} 
                 onUploadError={(error) => {
                   console.error('Upload error:', error);
                   setMessage({ type: 'error', content: 'Failed to upload photo' });
@@ -130,7 +132,7 @@ const SettingsPage = () => {
               className="h-24"
             />
           </div>
-          
+
           <Link to="/change-password" className="btn btn-warning">
             Change Password
           </Link>
