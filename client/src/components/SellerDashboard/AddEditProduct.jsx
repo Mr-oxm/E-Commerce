@@ -180,7 +180,7 @@ const AddEditProduct = ({ onProductSaved }) => {
   };
 
   return (
-    <div className="card w-full bg-base-100 shadow-xl">
+    <div className="card w-full bg-base-100">
       <div className="card-body">
         <h2 className="card-title">{id ? 'Edit Product' : 'Add New Product'}</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
