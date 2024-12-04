@@ -268,7 +268,11 @@ const AddEditProduct = ({ onProductSaved }) => {
                 placeholder="Add image URL"
                 className="input bg-base-200 focus:outline-none focus:ring-0 focus:border-primary flex-grow"
               />
-              <button type="button" onClick={handleImageAdd} className="btn btn-primary">
+              <button 
+                type="button" 
+                onClick={handleImageAdd} 
+                className={`btn btn-primary ${!newImageUrl ? 'btn-disabled' : ''}`}
+              >
                 <FiPlus />
               </button>
             </div>
