@@ -16,9 +16,9 @@ const { validate, schemas } = require('../utils/inputValidators');
 const router = express.Router();
 
 // Public routes
-router.get('/', getAllProducts);
 router.get('/search', searchProducts);
 router.get('/filter', filterProducts);
+router.get('/', getAllProducts);
 router.get('/seller/products/:id', getSellerProductsById);
 router.get('/:id', getProductById);
 
