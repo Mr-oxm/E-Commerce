@@ -22,22 +22,6 @@ const Navbar = () => {
         }
     };
 
-    const SearchBar = () => {
-        return (
-            <form onSubmit={handleSearch} className="w-full">
-                <label className="input group focus-within:outline-none focus-within:ring-0 focus-within:border-primary bg-base-200 flex items-center gap-2 w-full">
-                    <FaSearch className="h-4 w-4 opacity-60" />
-                    <input
-                        type="text"
-                        className="grow border-0"
-                        placeholder="Search"
-                        value={searchInput}
-                        onChange={(e) => setSearchInput(e.target.value)}
-                    />
-                </label>
-            </form>
-        )
-    }
 
     return (
         <div className="navbar bg-base-100 z-40 flex-wrap md:flex-nowrap">
@@ -50,7 +34,18 @@ const Navbar = () => {
 
             {/* Navbar center (unchanged) */}
             <div className="navbar-center min-w-96 hidden md:flex">
-                <SearchBar />
+                <form onSubmit={handleSearch} className="w-full">
+                    <label className="input group focus-within:outline-none focus-within:ring-0 focus-within:border-primary bg-base-200 flex items-center gap-2 w-full">
+                        <FaSearch className="h-4 w-4 opacity-60" />
+                        <input
+                            type="text"
+                            className="grow border-0"
+                            placeholder="Search"
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                        />
+                    </label>
+                </form>
             </div>
 
             {/* Navbar end */}
@@ -100,7 +95,18 @@ const Navbar = () => {
             {/* Mobile Search Bar - New */}
             {isSearchVisible && (
                 <div className="w-full p-2 md:hidden">
-                    <SearchBar />
+                    <form onSubmit={handleSearch} className="w-full">
+                        <label className="input group focus-within:outline-none focus-within:ring-0 focus-within:border-primary bg-base-200 flex items-center gap-2 w-full">
+                            <FaSearch className="h-4 w-4 opacity-60" />
+                            <input
+                                type="text"
+                                className="grow border-0"
+                                placeholder="Search"
+                                value={searchInput}
+                                onChange={(e) => setSearchInput(e.target.value)}
+                            />
+                        </label>
+                    </form>
                 </div>
             )}
         </div>

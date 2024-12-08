@@ -7,8 +7,8 @@ exports.signup = async (req, res) => {
         throw new Error('JWT_SECRET is not defined');
       }
       
-      const { username, email, password, role } = req.body;
-      const user = await User.create({ username, email, password, role });
+      const { username, email, password} = req.body;
+      const user = await User.create({ username, email, password});
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
       res.status(201).json({ success: true, token, needsOnboarding: true });
     } catch (error) {
