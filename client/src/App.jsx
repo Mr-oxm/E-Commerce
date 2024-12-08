@@ -19,6 +19,7 @@ import ProfilePage from './pages/ProfilePage/ProfilePage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
 import ChangePasswordPage from './pages/ChangePassword/ChangePasswordPage';
 import ProtectedRoute from './components/Shared/ProtectedRoute';
+import NotFoundPage from './pages/NotFound/NotFoundPage';
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
                 path="/change-password" 
                 element={<ProtectedRoute children={<Layout children={<ChangePasswordPage />} />}/>} 
               />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Router>
         </ShoppingCartProvider>
