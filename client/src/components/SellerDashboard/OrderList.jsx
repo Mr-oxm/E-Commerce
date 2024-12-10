@@ -125,6 +125,12 @@ const OrderList = ({ orders, loading, onStatusUpdate }) => {
                       <span className="opacity-70">Buyer: </span>
                       <span className="font-medium">{order.buyer?.profile?.fullName || 'Anonymous'}</span>
                     </div>
+                    {order.returnReason && (
+                      <div className="text-sm text-red-500">
+                        <span className="font-bold">Return Reason: </span>
+                        {order.returnReason}
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-wrap gap-4 text-sm">
                     {order.phoneNumber && (

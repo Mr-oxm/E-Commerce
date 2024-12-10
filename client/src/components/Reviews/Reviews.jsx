@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef } from 'react';
 import { FaStar, FaEdit, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
 import routes from '../../constants/routes';
@@ -9,8 +9,16 @@ const Reviews = ({ product, onReviewUpdate }) => {
   const [comment, setComment] = useState('');
   const [editingReview, setEditingReview] = useState(null);
   const { user } = useContext(AuthContext);
+  const formRef = useRef(null);
+  const [error, setError] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (comment.length < 10) {
+      setError('Comment must be at least 10 characters long.');
+      return;
+    }
+    setError('');
     try {
       if (editingReview) {
         await axios.put(routes.review.update(editingReview._id), {
@@ -37,6 +45,7 @@ const Reviews = ({ product, onReviewUpdate }) => {
     setEditingReview(review);
     setRating(review.rating);
     setComment(review.comment);
+    formRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleDelete = async (reviewId) => {
@@ -54,7 +63,7 @@ const Reviews = ({ product, onReviewUpdate }) => {
       
       {/* Review Form */}
       {user && (
-        <form onSubmit={handleSubmit} className="card bg-base-100 p-6 mb-8 !z-10">
+        <form ref={formRef} onSubmit={handleSubmit} className="card bg-base-100 p-6 mb-8 !z-10">
         <div className="mb-4">
           <label className="label">
             <span className="label-text">Rating</span>
@@ -84,6 +93,11 @@ const Reviews = ({ product, onReviewUpdate }) => {
             rows="3"
             required
           />
+          {error && 
+          <label className="label">
+            <span className="label-text text-error">{error}</span>
+          </label>
+          }
         </div>
         <div className="flex gap-2">
           <button type="submit" className="btn btn-primary">

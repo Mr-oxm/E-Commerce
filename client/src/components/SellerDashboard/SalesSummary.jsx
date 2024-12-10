@@ -4,15 +4,21 @@ import {
   FaArrowDown, FaBox, FaShippingFast, FaUserClock, FaChartPie,
   FaMoneyBillAlt, FaCalendarAlt
 } from 'react-icons/fa';
+import { AuthContext } from '../../context/AuthContext';
+import { useContext } from 'react';
 
 const SalesSummary = ({ orders }) => {
+  const { user } = useContext(AuthContext);
   // Existing calculations
-  const totalSales = orders.reduce((sum, order) => sum + order.totalAmount, 0);
+  const totalSales = orders.reduce((sum, order) => 
+    sum + order.products.reduce((pSum, product) => 
+      product.seller === user._id ? pSum + (product.price * product.quantity) : pSum, 0), 0);
   const totalOrders = orders.length;
   const pendingOrders = orders.filter(order => order.status === 'pending').length;
   const deliveredOrders = orders.filter(order => order.status === 'delivered').length;
   const totalProductsSold = orders.reduce((sum, order) => 
-    sum + order.products.reduce((pSum, product) => pSum + product.quantity, 0), 0);
+    sum + order.products.reduce((pSum, product) => 
+      product.seller === user._id ? pSum + product.quantity : pSum, 0), 0);
   const fulfillmentRate = orders.length > 0 
     ? ((deliveredOrders / totalOrders) * 100).toFixed(1)
     : 0;
@@ -31,7 +37,9 @@ const SalesSummary = ({ orders }) => {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
   const recentOrders = orders.filter(order => new Date(order.createdAt) > thirtyDaysAgo);
-  const recentSales = recentOrders.reduce((sum, order) => sum + order.totalAmount, 0);
+  const recentSales = recentOrders.reduce((sum, order) => 
+    sum + order.products.reduce((pSum, product) => 
+      product.seller === user._id ? pSum + (product.price * product.quantity) : pSum, 0), 0);
 
   // Calculate cancellation rate
   const cancellationRate = totalOrders > 0

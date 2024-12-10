@@ -44,25 +44,21 @@
 			"response": []
 		},
 		{
-			"name": "Search",
+			"name": "SellerProducts",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BaseURL}}/api/products/search?keyword=Apple",
+					"raw": "{{BaseURL}}/api/products/seller/products/6707f790c4d3e3610fb80466",
 					"host": [
 						"{{BaseURL}}"
 					],
 					"path": [
 						"api",
 						"products",
-						"search"
-					],
-					"query": [
-						{
-							"key": "keyword",
-							"value": "Apple"
-						}
+						"seller",
+						"products",
+						"6707f790c4d3e3610fb80466"
 					]
 				}
 			},
