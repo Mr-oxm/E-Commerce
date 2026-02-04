@@ -13,7 +13,6 @@ A modern, full-featured e-commerce marketplace platform built with the MERN stac
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [API Documentation](#api-documentation)
-- [Testing](#testing)
 - [Contributors](#contributors)
 
 ## ✨ Features
@@ -85,27 +84,27 @@ A modern, full-featured e-commerce marketplace platform built with the MERN stac
 ## 🛠 Tech Stack
 
 ### Frontend
-- **React 18.3.1** - UI library
-- **React Router DOM 6.26.2** - Client-side routing
-- **Vite 5.4.8** - Build tool and dev server
-- **Tailwind CSS 3.4.13** - Utility-first CSS framework
-- **DaisyUI 4.12.13** - Tailwind CSS component library
-- **Axios 1.7.7** - HTTP client
-- **React Icons 5.3.0** - Icon library
-- **PayPal React SDK 8.7.0** - PayPal payment integration
-- **UploadThing 7.3.0** - File upload handling
+- **React** - UI library
+- **React Router DOM** - Client-side routing
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+- **DaisyUI** - Tailwind CSS component library
+- **Axios** - HTTP client
+- **React Icons** - Icon library
+- **PayPal React SDK** - PayPal payment integration
+- **UploadThing** - File upload handling
 
 ### Backend
 - **Node.js** - JavaScript runtime
-- **Express.js 4.21.0** - Web framework
-- **MongoDB with Mongoose 8.7.0** - Database and ODM
-- **JSON Web Tokens (jsonwebtoken 9.0.2)** - Authentication
-- **bcryptjs 2.4.3** - Password hashing
-- **PayPal REST SDK 1.8.1** - Payment processing
-- **Express Validator 7.2.0** - Input validation
-- **Joi 17.13.3** - Schema validation
-- **CORS 2.8.5** - Cross-origin resource sharing
-- **dotenv 16.4.5** - Environment variable management
+- **Express.js** - Web framework
+- **MongoDB with Mongoose** - Database and ODM
+- **JSON Web Tokens** - Authentication
+- **bcryptjs** - Password hashing
+- **PayPal REST SDK** - Payment processing
+- **Express Validator** - Input validation
+- **Joi** - Schema validation
+- **CORS** - Cross-origin resource sharing
+- **dotenv** - Environment variable management
 
 ## 📁 Project Structure
 
@@ -303,22 +302,6 @@ For HTTPS support, place your SSL certificates in the `server/certificates/` dir
 - `POST /api/reviews` - Create review (protected)
 - `PUT /api/reviews/:id` - Update review (protected)
 - `DELETE /api/reviews/:id` - Delete review (protected)
-
-## 🧪 Testing
-
-The project includes Postman collections for API testing:
-
-### Available Test Collections
-- **Amir.postman_collection.json** - Authentication and user tests
-- **Merihan.postman_collection.json** - Product management tests
-- **Omar.postman_collection.json** - Order processing tests
-- **Sameh.postman_collection.json** - Payment integration tests
-
-### Running Tests
-1. Import the Postman collection files into Postman
-2. Configure environment variables in Postman
-3. Run the collections to test API endpoints
-4. Test results are available in the `tests/[Name] Test Results/` directories
 
 ## 🤝 Contributors
 
